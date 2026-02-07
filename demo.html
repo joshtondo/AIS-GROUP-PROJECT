@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TalentAI Pro - Job Matching Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0A2463;
+            --accent: #3E92CC;
+            --bright: #00D9FF;
+            --warm: #FF6B35;
+            --success: #10B981;
+            --dark: #0D1B2A;
+            --light: #F8F9FA;
+        }
+
+        body {
+            font-family: 'Bricolage Grotesque', sans-serif;
+            background: linear-gradient(135deg, #F8F9FA 0%, #E8EAF6 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        .demo-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            transition: gap 0.3s;
+        }
+
+        .back-link:hover {
+            gap: 1rem;
+        }
+
+        .demo-header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+        }
+
+        .demo-header p {
+            font-size: 1.2rem;
+            color: #6B7280;
+            max-width: 800px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        /* Two Column Layout */
+        .demo-grid {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        /* Resume Upload Section */
+        .upload-section {
+            background: white;
+            border-radius: 25px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 2rem;
+            height: fit-content;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #E5E7EB;
+            border-radius: 12px;
+            font-family: 'Bricolage Grotesque', sans-serif;
+            font-size: 0.95rem;
+            resize: vertical;
+            min-height: 400px;
+            margin-bottom: 1.5rem;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(62, 146, 204, 0.1);
+        }
+
+        .help-text {
+            font-size: 0.85rem;
+            color: #6B7280;
+            margin-bottom: 1.5rem;
+        }
+
+        .analyze-button {
+            width: 100%;
+            background: linear-gradient(135deg, #0A2463 0%, #3E92CC 100%);
+            color: white;
+            padding: 1.25rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Bricolage Grotesque', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 15px rgba(10, 36, 99, 0.3);
+        }
+
+        .analyze-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(10, 36, 99, 0.4);
+        }
+
+        .analyze-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Jobs Section */
+        .jobs-section {
+            background: white;
+            border-radius: 25px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        .jobs-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #F3F4F6;
+        }
+
+        .job-count {
+            background: var(--accent);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        /* Job Cards */
+        .job-card {
+            background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--accent);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .job-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .job-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .job-company {
+            font-size: 1.1rem;
+            color: #6B7280;
+            font-weight: 600;
+        }
+
+        .job-salary {
+            background: #ECFDF5;
+            color: #065F46;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .job-meta {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .job-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #4B5563;
+            font-size: 0.95rem;
+        }
+
+        .job-description {
+            color: #4B5563;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .job-requirements {
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .job-requirements strong {
+            color: var(--dark);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .skills-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .skill-tag {
+            background: #DBEAFE;
+            color: #1E40AF;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Loading */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #E5E7EB;
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .demo-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .upload-section {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="demo-header">
+            <a href="index.html" class="back-link">← Back to Home</a>
+            <div class="badge">🎯 AI-Powered Job Matching</div>
+            <h1>Find Your Perfect Match</h1>
+            <p>Paste your resume below and our AI will analyze it against 25 real job opportunities to find your best fits. No keyword matching - pure semantic understanding powered by Claude AI.</p>
+        </div>
+
+        <div class="demo-grid">
+            <!-- Resume Upload Column -->
+            <div class="upload-section">
+                <h2 class="section-title">
+                    <span>📄</span>
+                    Your Resume
+                </h2>
+
+                <textarea id="resumeText" placeholder="Paste your complete resume here...
+
+Include:
+• Contact information
+• Professional summary
+• Work experience with achievements
+• Technical skills and tools
+• Education and certifications
+• Any relevant projects
+
+Our AI will analyze this against all 25 jobs →"></textarea>
+
+                <p class="help-text">
+                    💡 Tip: The more detailed your resume, the better the matches! Include specific technologies, years of experience, and notable achievements.
+                </p>
+
+                <button class="analyze-button" id="analyzeBtn" onclick="analyzeResume()">
+                    🚀 Find My Best Matches
+                </button>
+
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p style="color: #6B7280; font-weight: 600;">AI analyzing your resume against 25 jobs...</p>
+                </div>
+            </div>
+
+            <!-- Jobs Listing Column -->
+            <div class="jobs-section">
+                <div class="jobs-header">
+                    <h2 class="section-title">
+                        <span>💼</span>
+                        Available Positions
+                    </h2>
+                    <div class="job-count">25 Jobs</div>
+                </div>
+
+                <div id="jobsList">
+                    <!-- Jobs will be loaded here by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // All 25 mock jobs - matches n8n workflow exactly
+        const jobs = [
+            // SENIOR LEVEL (6 jobs)
+            {
+                id: 'JOB-001',
+                title: 'Senior Software Engineer - Backend',
+                company: 'TechCorp Solutions',
+                location: 'San Francisco, CA (Hybrid)',
+                salary: '$150K - $200K',
+                description: 'Lead backend development, architect microservices, mentor engineers, and drive technical excellence.',
+                requirements: '5+ years backend with Python/Java. Expert in microservices, REST APIs, cloud (AWS/GCP). Docker, Kubernetes, CI/CD.',
+                skills: ['Python', 'Java', 'AWS', 'Kubernetes', 'Docker', 'Microservices', 'PostgreSQL', 'Redis', 'REST APIs', 'Leadership']
+            },
+            {
+                id: 'JOB-002',
+                title: 'Principal Data Engineer',
+                company: 'DataWave Analytics',
+                location: 'New York, NY',
+                salary: '$180K - $240K',
+                description: 'Build petabyte-scale data pipelines, lead data engineering teams, define technical roadmap.',
+                requirements: '8+ years data engineering. Expert in Spark, Airflow, SQL. Cloud data platforms (Snowflake, BigQuery).',
+                skills: ['Python', 'Apache Spark', 'Airflow', 'SQL', 'Kafka', 'Snowflake', 'AWS', 'ETL', 'Data Modeling', 'Leadership']
+            },
+            {
+                id: 'JOB-003',
+                title: 'Senior DevOps/SRE Engineer',
+                company: 'CloudScale Systems',
+                location: 'Seattle, WA (Remote OK)',
+                salary: '$150K - $200K',
+                description: 'Ensure 99.99% uptime, manage Kubernetes clusters, build automation, optimize cloud costs.',
+                requirements: '6+ years DevOps/SRE. Expert Kubernetes, Terraform, AWS. Python/Go for automation.',
+                skills: ['Kubernetes', 'Terraform', 'AWS', 'Docker', 'Python', 'CI/CD', 'Prometheus', 'Linux', 'Networking', 'SRE']
+            },
+            {
+                id: 'JOB-004',
+                title: 'Senior Machine Learning Engineer',
+                company: 'AI Innovations Lab',
+                location: 'Boston, MA',
+                salary: '$170K - $230K',
+                description: 'Build ML models for production, work on NLP and computer vision, collaborate with research.',
+                requirements: '5+ years ML engineering. Strong Python, TensorFlow/PyTorch. Production ML deployment.',
+                skills: ['Python', 'TensorFlow', 'PyTorch', 'scikit-learn', 'NLP', 'Computer Vision', 'MLOps', 'Kubernetes', 'AWS']
+            },
+            {
+                id: 'JOB-005',
+                title: 'Staff Security Engineer',
+                company: 'SecureCloud Inc',
+                location: 'Washington, DC',
+                salary: '$175K - $225K',
+                description: 'Lead security initiatives, conduct audits, respond to incidents, establish compliance frameworks.',
+                requirements: '8+ years security engineering. Cloud security, penetration testing. CISSP/CEH preferred.',
+                skills: ['Security', 'Penetration Testing', 'AWS Security', 'Python', 'SIEM', 'Compliance', 'Threat Modeling', 'Incident Response']
+            },
+            {
+                id: 'JOB-006',
+                title: 'Engineering Manager - Platform',
+                company: 'BuildTech',
+                location: 'Austin, TX (Hybrid)',
+                salary: '$165K - $210K',
+                description: 'Lead team of 8 engineers, set technical direction, balance technical leadership with people management.',
+                requirements: '6+ years engineering with 2+ management. Platform/infrastructure background. Strong communication.',
+                skills: ['Engineering Management', 'Leadership', 'Python', 'Platform Engineering', 'APIs', 'Cloud', 'Team Building', 'Agile']
+            },
+            // MID-LEVEL (10 jobs)
+            {
+                id: 'JOB-007',
+                title: 'Full Stack Developer',
+                company: 'StartupX Inc',
+                location: 'Remote (US)',
+                salary: '$120K - $160K',
+                description: 'Build features end-to-end, work with React and Node.js, shape product direction at startup.',
+                requirements: '3+ years full-stack. JavaScript/TypeScript, React, Node.js, MongoDB. Startup mentality.',
+                skills: ['JavaScript', 'TypeScript', 'React', 'Node.js', 'MongoDB', 'REST APIs', 'Git', 'HTML/CSS']
+            },
+            {
+                id: 'JOB-008',
+                title: 'Frontend Engineer - React',
+                company: 'DesignFirst Co',
+                location: 'Austin, TX',
+                salary: '$120K - $165K',
+                description: 'Create beautiful, responsive web apps with React and TypeScript. Build component libraries.',
+                requirements: '3+ years frontend with React. Expert TypeScript, CSS, modern JavaScript. Design sensibility.',
+                skills: ['React', 'TypeScript', 'CSS', 'HTML', 'JavaScript', 'Redux', 'Webpack', 'Jest', 'Figma']
+            },
+            {
+                id: 'JOB-009',
+                title: 'Backend Developer - FinTech',
+                company: 'FinTech Solutions',
+                location: 'Chicago, IL (Hybrid)',
+                salary: '$130K - $170K',
+                description: 'Build secure backend systems for financial applications. Handle millions of transactions.',
+                requirements: '4+ years backend. Java/Python, microservices, databases. Security focus.',
+                skills: ['Java', 'Spring Boot', 'Python', 'PostgreSQL', 'Redis', 'RabbitMQ', 'Kafka', 'REST APIs', 'Security']
+            },
+            {
+                id: 'JOB-010',
+                title: 'Data Analyst',
+                company: 'RetailTech Corp',
+                location: 'Dallas, TX',
+                salary: '$85K - $115K',
+                description: 'Turn data into insights, build dashboards, analyze trends, support data-driven decisions.',
+                requirements: '3+ years data analysis. Expert SQL, Tableau/Looker, Python (Pandas). Strong communication.',
+                skills: ['SQL', 'Python', 'Tableau', 'Data Analysis', 'Statistics', 'Business Intelligence', 'Pandas', 'Excel']
+            },
+            {
+                id: 'JOB-011',
+                title: 'iOS Developer',
+                company: 'AppWorks Studio',
+                location: 'Los Angeles, CA',
+                salary: '$125K - $170K',
+                description: 'Build iOS applications for millions, work with latest Swift and iOS frameworks.',
+                requirements: '3+ years iOS with Swift. Expert SwiftUI and UIKit. Published apps in App Store.',
+                skills: ['Swift', 'iOS', 'SwiftUI', 'UIKit', 'Xcode', 'Core Data', 'REST APIs', 'Git', 'Mobile Design']
+            },
+            {
+                id: 'JOB-012',
+                title: 'QA Automation Engineer',
+                company: 'QualityFirst Tech',
+                location: 'Denver, CO (Remote)',
+                salary: '$110K - $150K',
+                description: 'Build test automation frameworks, ensure quality across web and mobile platforms.',
+                requirements: '3+ years QA automation. Python/JavaScript, Selenium/Cypress, CI/CD integration.',
+                skills: ['Python', 'JavaScript', 'Selenium', 'Cypress', 'Jest', 'CI/CD', 'Test Automation', 'API Testing', 'Postman']
+            },
+            {
+                id: 'JOB-013',
+                title: 'Technical Product Manager',
+                company: 'ProductLab',
+                location: 'San Diego, CA',
+                salary: '$140K - $185K',
+                description: 'Lead B2B SaaS product development, work with engineering and customers on roadmap.',
+                requirements: '5+ years product management. Technical background. B2B SaaS experience. Data-driven.',
+                skills: ['Product Management', 'Agile', 'User Research', 'Analytics', 'SQL', 'Roadmapping', 'Stakeholder Management', 'APIs']
+            },
+            {
+                id: 'JOB-014',
+                title: 'Cloud Solutions Architect',
+                company: 'CloudConsulting Inc',
+                location: 'Atlanta, GA',
+                salary: '$140K - $180K',
+                description: 'Design cloud architectures for enterprise clients, lead migrations, optimize infrastructure.',
+                requirements: '5+ years cloud architecture. AWS/Azure expert. Client-facing, consulting skills.',
+                skills: ['AWS', 'Azure', 'Cloud Architecture', 'Terraform', 'Networking', 'Security', 'Consulting', 'Communication']
+            },
+            {
+                id: 'JOB-015',
+                title: 'Technical Writer - Developer Docs',
+                company: 'DocuTech Labs',
+                location: 'Remote (Global)',
+                salary: '$90K - $130K',
+                description: 'Create API documentation, tutorials, and guides for developer audiences.',
+                requirements: '3+ years technical writing. Strong understanding of APIs and development. Docs-as-code.',
+                skills: ['Technical Writing', 'API Documentation', 'Markdown', 'Git', 'APIs', 'Programming', 'Communication']
+            },
+            {
+                id: 'JOB-016',
+                title: 'Site Reliability Engineer',
+                company: 'UpTime Systems',
+                location: 'Portland, OR (Remote)',
+                salary: '$155K - $200K',
+                description: 'Maintain 99.99% uptime, build monitoring, improve reliability, on-call rotation.',
+                requirements: '4+ years SRE/DevOps. Strong Linux, Kubernetes, distributed systems. Python/Go.',
+                skills: ['SRE', 'Linux', 'Kubernetes', 'Python', 'Monitoring', 'Incident Response', 'Distributed Systems', 'SLI/SLO']
+            },
+            // JUNIOR/ENTRY LEVEL (9 jobs)
+            {
+                id: 'JOB-017',
+                title: 'Junior Software Developer',
+                company: 'Tech Academy',
+                location: 'Remote (US)',
+                salary: '$70K - $95K',
+                description: 'Start your career with mentorship from senior engineers. Learn best practices.',
+                requirements: '0-2 years or bootcamp grad. JavaScript, Python, or Java. Eager to learn.',
+                skills: ['JavaScript', 'Python', 'Git', 'HTML/CSS', 'REST APIs', 'Problem Solving']
+            },
+            {
+                id: 'JOB-018',
+                title: 'Associate Data Scientist',
+                company: 'DataStart Inc',
+                location: 'New York, NY',
+                salary: '$80K - $105K',
+                description: 'Apply ML to business problems, work with senior data scientists, learn and grow.',
+                requirements: 'Bachelor/Master in Stats/CS. 0-2 years. Python, Pandas, scikit-learn, SQL.',
+                skills: ['Python', 'Machine Learning', 'Pandas', 'SQL', 'Statistics', 'Data Analysis', 'scikit-learn']
+            },
+            {
+                id: 'JOB-019',
+                title: 'Frontend Developer (Junior)',
+                company: 'WebStudio',
+                location: 'Miami, FL',
+                salary: '$75K - $100K',
+                description: 'Build responsive websites for clients, grow frontend skills in creative environment.',
+                requirements: '1-3 years frontend. HTML5, CSS3, JavaScript, basic React. Eye for design.',
+                skills: ['HTML', 'CSS', 'JavaScript', 'React', 'Responsive Design', 'Git', 'Web Development']
+            },
+            {
+                id: 'JOB-020',
+                title: 'Junior DevOps Engineer',
+                company: 'StartupCloud',
+                location: 'Remote',
+                salary: '$85K - $110K',
+                description: 'Learn DevOps and cloud infrastructure, automate deployments, maintain systems.',
+                requirements: '1-3 years IT/development. Basic Linux, AWS, Docker. Bash/Python scripting.',
+                skills: ['Linux', 'AWS', 'Docker', 'CI/CD', 'Python', 'Bash', 'Automation', 'Networking']
+            },
+            {
+                id: 'JOB-021',
+                title: 'Quality Assurance Engineer',
+                company: 'TestRight Software',
+                location: 'Phoenix, AZ',
+                salary: '$65K - $90K',
+                description: 'Ensure software quality through manual and automated testing. Learn QA practices.',
+                requirements: '0-3 years QA. Detail-oriented, testing mindset. Basic programming helpful.',
+                skills: ['Manual Testing', 'Test Cases', 'Bug Tracking', 'Attention to Detail', 'Communication']
+            },
+            {
+                id: 'JOB-022',
+                title: 'Technical Support Engineer',
+                company: 'SupportTech',
+                location: 'Remote',
+                salary: '$60K - $85K',
+                description: 'Provide technical support to customers, troubleshoot issues, help customers succeed.',
+                requirements: '0-2 years support. Strong problem-solving, excellent communication, technical aptitude.',
+                skills: ['Customer Support', 'Troubleshooting', 'Communication', 'Technical Aptitude', 'Documentation']
+            },
+            {
+                id: 'JOB-023',
+                title: 'Business Analyst',
+                company: 'ConsultCorp',
+                location: 'Chicago, IL',
+                salary: '$70K - $95K',
+                description: 'Bridge business and technology, gather requirements, analyze processes.',
+                requirements: '1-3 years business analysis. Strong analytical thinking, Excel, documentation skills.',
+                skills: ['Business Analysis', 'Requirements Gathering', 'Excel', 'Communication', 'Process Mapping', 'Documentation']
+            },
+            {
+                id: 'JOB-024',
+                title: 'UI/UX Designer',
+                company: 'CreativeDesign Co',
+                location: 'San Francisco, CA',
+                salary: '$75K - $105K',
+                description: 'Design beautiful interfaces, create wireframes and prototypes, conduct user research.',
+                requirements: '1-4 years UI/UX design. Strong portfolio, Figma/Sketch proficiency, design principles.',
+                skills: ['UI Design', 'UX Design', 'Figma', 'Wireframing', 'Prototyping', 'User Research', 'Visual Design']
+            },
+            {
+                id: 'JOB-025',
+                title: 'Data Engineer (Junior)',
+                company: 'DataPipeline Inc',
+                location: 'Remote',
+                salary: '$85K - $115K',
+                description: 'Build data pipelines and infrastructure, learn modern data engineering practices.',
+                requirements: '1-3 years programming (Python preferred). Strong SQL, basic data modeling, cloud basics.',
+                skills: ['Python', 'SQL', 'ETL', 'Data Modeling', 'Cloud Basics', 'Data Pipelines', 'Problem Solving']
+            }
+        ];
+
+        // Load jobs on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            const jobsList = document.getElementById('jobsList');
+            
+            jobs.forEach(function(job) {
+                const skillTags = job.skills.map(function(skill) {
+                    return '<span class="skill-tag">' + skill + '</span>';
+                }).join('');
+
+                jobsList.innerHTML += 
+                    '<div class="job-card">' +
+                        '<div class="job-header">' +
+                            '<div>' +
+                                '<div class="job-title">' + job.title + '</div>' +
+                                '<div class="job-company">' + job.company + '</div>' +
+                            '</div>' +
+                            '<div class="job-salary">' + job.salary + '</div>' +
+                        '</div>' +
+                        '<div class="job-meta">' +
+                            '<div class="job-meta-item">' +
+                                '<span>📍</span>' +
+                                job.location +
+                            '</div>' +
+                            '<div class="job-meta-item">' +
+                                '<span>💼</span>' +
+                                'Full-time' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="job-description">' + job.description + '</div>' +
+                        '<div class="job-requirements">' +
+                            '<strong>Requirements:</strong>' +
+                            job.requirements +
+                        '</div>' +
+                        '<div class="skills-tags">' +
+                            skillTags +
+                        '</div>' +
+                    '</div>';
+            });
+        });
+
+        // Analyze resume function - Connects to AI Agent workflow
+        async function analyzeResume() {
+            const resumeText = document.getElementById('resumeText').value;
+
+            if (!resumeText || resumeText.trim().length < 100) {
+                alert('Please paste your complete resume (at least 100 characters) to analyze!');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('loading').classList.add('active');
+            document.getElementById('analyzeBtn').disabled = true;
+
+            try {
+                // Call n8n AI Agent webhook
+                const response = await fetch('https://jritondo.app.n8n.cloud/webhook/agent-match', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        resumeText: resumeText,
+                        candidateName: 'Anonymous Candidate',
+                        timestamp: new Date().toISOString()
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Analysis failed: ' + response.statusText);
+                }
+
+                const results = await response.json();
+                
+                // Store results and redirect to results page
+                sessionStorage.setItem('talentAIResults', JSON.stringify(results));
+                window.location.href = 'results.html';
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Analysis failed. Please check:\n\n1. n8n workflow is ACTIVE\n2. Claude API key is configured\n3. Internet connection is working\n\nError: ' + error.message);
+            } finally {
+                document.getElementById('loading').classList.remove('active');
+                document.getElementById('analyzeBtn').disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
