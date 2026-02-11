@@ -323,8 +323,8 @@
         <div class="demo-header">
             <a href="index.html" class="back-link">← Back to Home</a>
             <div class="badge">🎯 AI-Powered Job Matching</div>
-            <h1>Find Your Perfect Match</h1>
-            <p>Paste your resume below and our AI will analyze it against 25 real job opportunities to find your best fits. No keyword matching - pure semantic understanding powered by Claude AI.</p>
+            <h1>Discover Internal Opportunities</h1>
+            <p>Enter your employee profile below and our AI will analyze it against 25 job opportunities to find your best fits. No keyword matching - pure semantic understanding powered by Claude AI.</p>
         </div>
 
         <div class="demo-grid">
@@ -335,7 +335,7 @@
                     Your Resume
                 </h2>
 
-                <textarea id="resumeText" placeholder="Paste your complete resume here...
+                <textarea id="resumeText" placeholder="Paste your employee profile here...
 
 Include:
 • Contact information
@@ -348,18 +348,18 @@ Include:
 Our AI will analyze this against all 25 jobs →"></textarea>
 
                 <p class="help-text">
-                    💡 Tip: The more detailed your resume, the better the matches! Include specific technologies, years of experience, and notable achievements.
+                    💡 Tip: The more detailed your profile is, the better the matches! Include specific technologies, years of experience, and notable achievements.
                 </p>
 
                 <button class="analyze-button" id="analyzeBtn" onclick="analyzeResume()">
-                    🚀 Find My Best Matches
+                    🚀 Find Internal Opportunities
                 </button>
 
                 <!-- Loading State -->
                 <div class="loading" id="loading">
                     <div class="spinner"></div>
-                    <p style="color: #6B7280; font-weight: 600;">AI analyzing your resume against 25 jobs...</p>
-                    <p style="color: #9CA3AF; font-size: 0.9rem; margin-top: 0.5rem;">This may take 10-30 seconds</p>
+                    <p style="color: #6B7280; font-weight: 600;">AI analyzing your profile against 25 jobs...</p>
+                    <p style="color: #9CA3AF; font-size: 0.9rem; margin-top: 0.5rem;">This may take 30-60 seconds</p>
                 </div>
             </div>
 
@@ -683,7 +683,7 @@ Our AI will analyze this against all 25 jobs →"></textarea>
             const resumeText = document.getElementById('resumeText').value;
 
             if (!resumeText || resumeText.trim().length < 100) {
-                alert('Please paste your complete resume (at least 100 characters) to analyze!');
+                alert('Please paste your complete profile (at least 100 characters) to analyze!');
                 return;
             }
 
