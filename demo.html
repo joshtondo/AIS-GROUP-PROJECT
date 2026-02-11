@@ -281,7 +281,7 @@
             font-weight: 600;
         }
 
-        /* Loading */
+        /* Loading State */
         .loading {
             display: none;
             text-align: center;
@@ -355,9 +355,11 @@ Our AI will analyze this against all 25 jobs →"></textarea>
                     🚀 Find My Best Matches
                 </button>
 
+                <!-- Loading State -->
                 <div class="loading" id="loading">
                     <div class="spinner"></div>
                     <p style="color: #6B7280; font-weight: 600;">AI analyzing your resume against 25 jobs...</p>
+                    <p style="color: #9CA3AF; font-size: 0.9rem; margin-top: 0.5rem;">This may take 10-30 seconds</p>
                 </div>
             </div>
 
@@ -676,7 +678,7 @@ Our AI will analyze this against all 25 jobs →"></textarea>
             });
         });
 
-        // Analyze resume function - Connects to AI Agent workflow
+        // SIMPLIFIED analyze function - accepts ANY valid JSON response
         async function analyzeResume() {
             const resumeText = document.getElementById('resumeText').value;
 
@@ -690,7 +692,7 @@ Our AI will analyze this against all 25 jobs →"></textarea>
             document.getElementById('analyzeBtn').disabled = true;
 
             try {
-                // Call n8n AI Agent webhook
+                // Call n8n webhook
                 const response = await fetch('https://jritondo.app.n8n.cloud/webhook/agent-match', {
                     method: 'POST',
                     headers: {
@@ -703,22 +705,33 @@ Our AI will analyze this against all 25 jobs →"></textarea>
                     })
                 });
 
-                if (!response.ok) {
-                    throw new Error('Analysis failed: ' + response.statusText);
+                // Get response as text first
+                const responseText = await response.text();
+                console.log('Response received:', responseText.substring(0, 200));
+
+                // Try to parse as JSON
+                let results;
+                try {
+                    results = JSON.parse(responseText);
+                } catch (e) {
+                    // If not JSON, treat as text
+                    results = { rawResponse: responseText };
                 }
 
-                const results = await response.json();
-                
-                // Store results and redirect to results page
+                // Store whatever we got
                 sessionStorage.setItem('talentAIResults', JSON.stringify(results));
+                
+                // Hide loading
+                document.getElementById('loading').classList.remove('active');
+                
+                // Go to results page - let results.html handle the data
                 window.location.href = 'results.html';
-
+                
             } catch (error) {
                 console.error('Error:', error);
-                alert('Analysis failed. Please check:\n\n1. n8n workflow is ACTIVE\n2. Claude API key is configured\n3. Internet connection is working\n\nError: ' + error.message);
-            } finally {
                 document.getElementById('loading').classList.remove('active');
                 document.getElementById('analyzeBtn').disabled = false;
+                alert('Connection error. Is the workflow running?\n\n' + error.message);
             }
         }
     </script>
