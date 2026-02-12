@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TalentAI Pro - Job Matching Demo</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&display=swap"
+        rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -303,7 +306,9 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         /* Responsive */
@@ -318,13 +323,15 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="demo-header">
             <a href="index.html" class="back-link">← Back to Home</a>
             <div class="badge">🎯 AI-Powered Job Matching</div>
             <h1>Discover Internal Opportunities</h1>
-            <p>Enter your employee profile below and our AI will analyze it against 25 job opportunities to find your best fits. No keyword matching - pure semantic understanding powered by Claude AI.</p>
+            <p>Enter your employee profile below and our AI will analyze it against 25 job opportunities to find your
+                best fits. No keyword matching - pure semantic understanding powered by Claude AI.</p>
         </div>
 
         <div class="demo-grid">
@@ -348,7 +355,8 @@ Include:
 Our AI will analyze this against all 25 jobs →"></textarea>
 
                 <p class="help-text">
-                    💡 Tip: The more detailed your profile is, the better the matches! Include specific technologies, years of experience, and notable achievements.
+                    💡 Tip: The more detailed your profile is, the better the matches! Include specific technologies,
+                    years of experience, and notable achievements.
                 </p>
 
                 <button class="analyze-button" id="analyzeBtn" onclick="analyzeResume()">
@@ -381,299 +389,412 @@ Our AI will analyze this against all 25 jobs →"></textarea>
     </div>
 
     <script>
-        // All 25 mock jobs - matches n8n workflow exactly
+        // All 20 mock jobs
         const jobs = [
-            // SENIOR LEVEL (6 jobs)
+            // SENIOR SOFTWARE ENGINEERING (5)
             {
                 id: 'JOB-001',
-                title: 'Senior Software Engineer - Backend',
-                company: 'TechCorp Solutions',
-                location: 'San Francisco, CA (Hybrid)',
-                salary: '$150K - $200K',
-                description: 'Lead backend development, architect microservices, mentor engineers, and drive technical excellence.',
-                requirements: '5+ years backend with Python/Java. Expert in microservices, REST APIs, cloud (AWS/GCP). Docker, Kubernetes, CI/CD.',
-                skills: ['Python', 'Java', 'AWS', 'Kubernetes', 'Docker', 'Microservices', 'PostgreSQL', 'Redis', 'REST APIs', 'Leadership']
+                title: 'Senior Full Stack Engineer',
+                company: 'Internal Engineering',
+                location: 'Austin, TX (Hybrid)',
+                salary: '$150,000 - $190,000',
+                experienceLevel: 'Senior (5-8 years)',
+                department: 'Product Engineering',
+                description: 'Lead development of our core platform serving 2M+ users. Build scalable microservices with Python and React. Mentor junior engineers and drive technical excellence.',
+                skills: ['Python', 'JavaScript', 'React', 'Node.js', 'PostgreSQL', 'AWS', 'Docker', 'Microservices', 'Leadership'],
+                requirements: [
+                    '5+ years professional software engineering experience',
+                    'Strong experience with Python and modern JavaScript frameworks',
+                    'Experience designing scalable distributed systems',
+                    'Experience mentoring engineers',
+                    'Bachelor’s degree in Computer Science or equivalent experience'
+                ]
             },
             {
                 id: 'JOB-002',
-                title: 'Principal Data Engineer',
-                company: 'DataWave Analytics',
-                location: 'New York, NY',
-                salary: '$180K - $240K',
-                description: 'Build petabyte-scale data pipelines, lead data engineering teams, define technical roadmap.',
-                requirements: '8+ years data engineering. Expert in Spark, Airflow, SQL. Cloud data platforms (Snowflake, BigQuery).',
-                skills: ['Python', 'Apache Spark', 'Airflow', 'SQL', 'Kafka', 'Snowflake', 'AWS', 'ETL', 'Data Modeling', 'Leadership']
+                title: 'Senior Backend Engineer',
+                company: 'Internal Platform Team',
+                location: 'Remote',
+                salary: '$145,000 - $180,000',
+                experienceLevel: 'Senior (5-8 years)',
+                department: 'Platform Engineering',
+                description: 'Design and build backend systems handling millions of API requests daily. Work with Python, Django, PostgreSQL, and Redis. Optimize performance and scalability.',
+                skills: ['Python', 'Django', 'PostgreSQL', 'Redis', 'REST APIs', 'AWS', 'System Design', 'Performance Optimization'],
+                requirements: [
+                    '5+ years backend development experience',
+                    'Deep experience with Python and Django',
+                    'Strong database design skills',
+                    'Experience with high-traffic APIs',
+                    'Bachelor’s degree or equivalent experience'
+                ]
             },
             {
                 id: 'JOB-003',
-                title: 'Senior DevOps/SRE Engineer',
-                company: 'CloudScale Systems',
-                location: 'Seattle, WA (Remote OK)',
-                salary: '$150K - $200K',
-                description: 'Ensure 99.99% uptime, manage Kubernetes clusters, build automation, optimize cloud costs.',
-                requirements: '6+ years DevOps/SRE. Expert Kubernetes, Terraform, AWS. Python/Go for automation.',
-                skills: ['Kubernetes', 'Terraform', 'AWS', 'Docker', 'Python', 'CI/CD', 'Prometheus', 'Linux', 'Networking', 'SRE']
+                title: 'Senior Frontend Engineer',
+                company: 'Internal UX Team',
+                location: 'San Francisco, CA (Hybrid)',
+                salary: '$140,000 - $175,000',
+                experienceLevel: 'Senior (5-7 years)',
+                department: 'User Experience',
+                description: 'Build beautiful, responsive web applications with React and TypeScript. Work closely with designers to create exceptional user experiences. Lead frontend architecture decisions.',
+                skills: ['React', 'TypeScript', 'JavaScript', 'CSS', 'HTML5', 'Redux', 'Next.js', 'Performance', 'Accessibility'],
+                requirements: [
+                    '5+ years frontend development experience',
+                    'Expert knowledge of React and TypeScript',
+                    'Strong understanding of modern frontend architecture',
+                    'Experience leading frontend initiatives',
+                    'Strong UI/UX collaboration skills'
+                ]
             },
             {
                 id: 'JOB-004',
-                title: 'Senior Machine Learning Engineer',
-                company: 'AI Innovations Lab',
-                location: 'Boston, MA',
-                salary: '$170K - $230K',
-                description: 'Build ML models for production, work on NLP and computer vision, collaborate with research.',
-                requirements: '5+ years ML engineering. Strong Python, TensorFlow/PyTorch. Production ML deployment.',
-                skills: ['Python', 'TensorFlow', 'PyTorch', 'scikit-learn', 'NLP', 'Computer Vision', 'MLOps', 'Kubernetes', 'AWS']
+                title: 'Staff Software Engineer',
+                company: 'Internal Architecture Team',
+                location: 'Austin, TX',
+                salary: '$165,000 - $210,000',
+                experienceLevel: 'Staff (8+ years)',
+                department: 'Engineering Architecture',
+                description: 'Own technical direction for critical systems. Design solutions at scale. Drive engineering best practices across teams. Mentor senior engineers.',
+                skills: ['Python', 'System Design', 'Architecture', 'Leadership', 'Microservices', 'Cloud', 'Performance', 'Mentoring'],
+                requirements: [
+                    '8+ years professional engineering experience',
+                    'Proven experience designing large-scale systems',
+                    'Experience leading cross-team technical initiatives',
+                    'Strong architectural decision-making skills',
+                    'Track record of mentoring senior engineers'
+                ]
             },
             {
                 id: 'JOB-005',
-                title: 'Staff Security Engineer',
-                company: 'SecureCloud Inc',
-                location: 'Washington, DC',
-                salary: '$175K - $225K',
-                description: 'Lead security initiatives, conduct audits, respond to incidents, establish compliance frameworks.',
-                requirements: '8+ years security engineering. Cloud security, penetration testing. CISSP/CEH preferred.',
-                skills: ['Security', 'Penetration Testing', 'AWS Security', 'Python', 'SIEM', 'Compliance', 'Threat Modeling', 'Incident Response']
+                title: 'Engineering Manager - Backend',
+                company: 'Internal Engineering',
+                location: 'Austin, TX (Hybrid)',
+                salary: '$155,000 - $195,000',
+                experienceLevel: 'Manager (6+ years with 2+ leadership)',
+                department: 'Backend Engineering',
+                description: 'Lead team of 6-8 backend engineers. Balance hands-on technical work with people management. Drive roadmap planning and technical strategy.',
+                skills: ['Engineering Management', 'Python', 'System Design', 'Leadership', 'Team Building', 'Technical Strategy'],
+                requirements: [
+                    '6+ years engineering experience',
+                    '2+ years people management experience',
+                    'Strong backend system design skills',
+                    'Experience hiring and mentoring engineers',
+                    'Strong communication and leadership skills'
+                ]
             },
+
+            // MID-LEVEL SOFTWARE ENGINEERING (8)
             {
                 id: 'JOB-006',
-                title: 'Engineering Manager - Platform',
-                company: 'BuildTech',
-                location: 'Austin, TX (Hybrid)',
-                salary: '$165K - $210K',
-                description: 'Lead team of 8 engineers, set technical direction, balance technical leadership with people management.',
-                requirements: '6+ years engineering with 2+ management. Platform/infrastructure background. Strong communication.',
-                skills: ['Engineering Management', 'Leadership', 'Python', 'Platform Engineering', 'APIs', 'Cloud', 'Team Building', 'Agile']
+                title: 'Full Stack Developer',
+                company: 'Internal Product Team',
+                location: 'Remote',
+                salary: '$115,000 - $145,000',
+                experienceLevel: 'Mid-Level (3-5 years)',
+                department: 'Product Development',
+                description: 'Build features end-to-end using React and Node.js. Work across the full stack. Collaborate with product managers and designers. Ship code daily.',
+                skills: ['JavaScript', 'React', 'Node.js', 'MongoDB', 'REST APIs', 'Git', 'Agile', 'Problem Solving'],
+                requirements: [
+                    '3+ years full stack development experience',
+                    'Experience with React and Node.js',
+                    'Experience working in Agile teams',
+                    'Strong problem-solving skills',
+                    'Bachelor’s degree or equivalent experience'
+                ]
             },
-            // MID-LEVEL (10 jobs)
             {
                 id: 'JOB-007',
-                title: 'Full Stack Developer',
-                company: 'StartupX Inc',
-                location: 'Remote (US)',
-                salary: '$120K - $160K',
-                description: 'Build features end-to-end, work with React and Node.js, shape product direction at startup.',
-                requirements: '3+ years full-stack. JavaScript/TypeScript, React, Node.js, MongoDB. Startup mentality.',
-                skills: ['JavaScript', 'TypeScript', 'React', 'Node.js', 'MongoDB', 'REST APIs', 'Git', 'HTML/CSS']
+                title: 'Backend Developer',
+                company: 'Internal Data Team',
+                location: 'Chicago, IL',
+                salary: '$120,000 - $150,000',
+                experienceLevel: 'Mid-Level (3-5 years)',
+                department: 'Data Engineering',
+                description: 'Build data processing pipelines and APIs. Work with Python, FastAPI, and PostgreSQL. Process millions of records daily. Optimize database performance.',
+                skills: ['Python', 'FastAPI', 'PostgreSQL', 'SQL', 'REST APIs', 'ETL', 'Data Processing', 'AWS'],
+                requirements: [
+                    '3+ years backend development experience',
+                    'Strong Python and SQL skills',
+                    'Experience building APIs',
+                    'Experience with relational databases',
+                    'Familiarity with AWS'
+                ]
             },
             {
                 id: 'JOB-008',
-                title: 'Frontend Engineer - React',
-                company: 'DesignFirst Co',
-                location: 'Austin, TX',
-                salary: '$120K - $165K',
-                description: 'Create beautiful, responsive web apps with React and TypeScript. Build component libraries.',
-                requirements: '3+ years frontend with React. Expert TypeScript, CSS, modern JavaScript. Design sensibility.',
-                skills: ['React', 'TypeScript', 'CSS', 'HTML', 'JavaScript', 'Redux', 'Webpack', 'Jest', 'Figma']
+                title: 'DevOps Engineer',
+                company: 'Internal Infrastructure',
+                location: 'Remote',
+                salary: '$125,000 - $155,000',
+                experienceLevel: 'Mid-Level (3-5 years)',
+                department: 'Infrastructure',
+                description: 'Manage AWS infrastructure and CI/CD pipelines. Work with Kubernetes, Docker, and Terraform. Ensure 99.9% uptime. Automate everything.',
+                skills: ['AWS', 'Kubernetes', 'Docker', 'Terraform', 'CI/CD', 'Python', 'Linux', 'Automation'],
+                requirements: [
+                    '3+ years DevOps or infrastructure experience',
+                    'Experience with AWS and Kubernetes',
+                    'Strong Linux skills',
+                    'Experience building CI/CD pipelines',
+                    'Automation mindset'
+                ]
             },
             {
                 id: 'JOB-009',
-                title: 'Backend Developer - FinTech',
-                company: 'FinTech Solutions',
-                location: 'Chicago, IL (Hybrid)',
-                salary: '$130K - $170K',
-                description: 'Build secure backend systems for financial applications. Handle millions of transactions.',
-                requirements: '4+ years backend. Java/Python, microservices, databases. Security focus.',
-                skills: ['Java', 'Spring Boot', 'Python', 'PostgreSQL', 'Redis', 'RabbitMQ', 'Kafka', 'REST APIs', 'Security']
+                title: 'Python Developer',
+                company: 'Internal Analytics Team',
+                location: 'New York, NY',
+                salary: '$110,000 - $140,000',
+                experienceLevel: 'Mid-Level (3-5 years)',
+                department: 'Analytics',
+                description: 'Build data analysis tools and automation scripts. Work with Python, pandas, and SQL. Create dashboards and reports. Support data-driven decision making.',
+                skills: ['Python', 'Pandas', 'SQL', 'Data Analysis', 'APIs', 'Flask', 'PostgreSQL', 'Visualization'],
+                requirements: [
+                    '3+ years Python development experience',
+                    'Experience with data analysis libraries',
+                    'Strong SQL skills',
+                    'Experience building dashboards or reports',
+                    'Strong analytical thinking'
+                ]
             },
             {
                 id: 'JOB-010',
-                title: 'Data Analyst',
-                company: 'RetailTech Corp',
-                location: 'Dallas, TX',
-                salary: '$85K - $115K',
-                description: 'Turn data into insights, build dashboards, analyze trends, support data-driven decisions.',
-                requirements: '3+ years data analysis. Expert SQL, Tableau/Looker, Python (Pandas). Strong communication.',
-                skills: ['SQL', 'Python', 'Tableau', 'Data Analysis', 'Statistics', 'Business Intelligence', 'Pandas', 'Excel']
+                title: 'Site Reliability Engineer',
+                company: 'Internal SRE Team',
+                location: 'Seattle, WA',
+                salary: '$130,000 - $165,000',
+                experienceLevel: 'Mid-Level (4-6 years)',
+                department: 'Site Reliability',
+                description: 'Ensure system reliability and performance. Build monitoring and alerting. Participate in on-call rotation. Improve deployment processes.',
+                skills: ['Python', 'Kubernetes', 'Monitoring', 'AWS', 'Linux', 'Incident Response', 'Automation', 'SRE'],
+                requirements: [
+                    '4+ years SRE or infrastructure experience',
+                    'Experience with monitoring tools',
+                    'Strong troubleshooting skills',
+                    'Experience with Kubernetes',
+                    'Willingness to participate in on-call rotation'
+                ]
             },
+
+            // Remaining jobs (011–020) follow same structure with tailored requirements...
             {
                 id: 'JOB-011',
-                title: 'iOS Developer',
-                company: 'AppWorks Studio',
+                title: 'Frontend Developer',
+                company: 'Internal Web Team',
                 location: 'Los Angeles, CA',
-                salary: '$125K - $170K',
-                description: 'Build iOS applications for millions, work with latest Swift and iOS frameworks.',
-                requirements: '3+ years iOS with Swift. Expert SwiftUI and UIKit. Published apps in App Store.',
-                skills: ['Swift', 'iOS', 'SwiftUI', 'UIKit', 'Xcode', 'Core Data', 'REST APIs', 'Git', 'Mobile Design']
+                salary: '$105,000 - $135,000',
+                experienceLevel: 'Mid-Level (3-5 years)',
+                department: 'Web Development',
+                description: 'Build responsive web interfaces with React. Implement pixel-perfect designs. Optimize performance. Write clean, maintainable code.',
+                skills: ['React', 'JavaScript', 'TypeScript', 'CSS', 'HTML', 'Redux', 'Webpack', 'Performance'],
+                requirements: [
+                    '3+ years frontend development experience',
+                    'Strong proficiency in React and TypeScript',
+                    'Experience translating design mockups into production code',
+                    'Understanding of performance optimization techniques',
+                    'Experience with modern build tools'
+                ]
             },
             {
                 id: 'JOB-012',
-                title: 'QA Automation Engineer',
-                company: 'QualityFirst Tech',
-                location: 'Denver, CO (Remote)',
-                salary: '$110K - $150K',
-                description: 'Build test automation frameworks, ensure quality across web and mobile platforms.',
-                requirements: '3+ years QA automation. Python/JavaScript, Selenium/Cypress, CI/CD integration.',
-                skills: ['Python', 'JavaScript', 'Selenium', 'Cypress', 'Jest', 'CI/CD', 'Test Automation', 'API Testing', 'Postman']
+                title: 'Cloud Engineer',
+                company: 'Internal Cloud Team',
+                location: 'Remote',
+                salary: '$120,000 - $150,000',
+                experienceLevel: 'Mid-Level (3-5 years)',
+                department: 'Cloud Infrastructure',
+                description: 'Design and manage cloud infrastructure on AWS. Implement infrastructure as code with Terraform. Optimize costs and performance.',
+                skills: ['AWS', 'Terraform', 'CloudFormation', 'Python', 'Networking', 'Security', 'Cost Optimization'],
+                requirements: [
+                    '3+ years cloud infrastructure experience',
+                    'Strong experience with AWS services',
+                    'Experience with Terraform or infrastructure as code',
+                    'Understanding of networking and security best practices',
+                    'Experience optimizing cloud costs'
+                ]
             },
             {
                 id: 'JOB-013',
-                title: 'Technical Product Manager',
-                company: 'ProductLab',
-                location: 'San Diego, CA',
-                salary: '$140K - $185K',
-                description: 'Lead B2B SaaS product development, work with engineering and customers on roadmap.',
-                requirements: '5+ years product management. Technical background. B2B SaaS experience. Data-driven.',
-                skills: ['Product Management', 'Agile', 'User Research', 'Analytics', 'SQL', 'Roadmapping', 'Stakeholder Management', 'APIs']
+                title: 'API Developer',
+                company: 'Internal Platform',
+                location: 'Austin, TX',
+                salary: '$115,000 - $145,000',
+                experienceLevel: 'Mid-Level (3-5 years)',
+                department: 'Platform',
+                description: 'Design and build RESTful APIs. Work with Python and FastAPI. Ensure API performance and reliability. Write comprehensive documentation.',
+                skills: ['Python', 'FastAPI', 'REST APIs', 'PostgreSQL', 'Redis', 'API Design', 'Documentation', 'Testing'],
+                requirements: [
+                    '3+ years backend or API development experience',
+                    'Strong experience building RESTful services',
+                    'Experience with FastAPI or similar frameworks',
+                    'Knowledge of database design principles',
+                    'Ability to write clear technical documentation'
+                ]
             },
             {
                 id: 'JOB-014',
-                title: 'Cloud Solutions Architect',
-                company: 'CloudConsulting Inc',
-                location: 'Atlanta, GA',
-                salary: '$140K - $180K',
-                description: 'Design cloud architectures for enterprise clients, lead migrations, optimize infrastructure.',
-                requirements: '5+ years cloud architecture. AWS/Azure expert. Client-facing, consulting skills.',
-                skills: ['AWS', 'Azure', 'Cloud Architecture', 'Terraform', 'Networking', 'Security', 'Consulting', 'Communication']
+                title: 'Junior Full Stack Developer',
+                company: 'Internal Development',
+                location: 'Remote',
+                salary: '$85,000 - $110,000',
+                experienceLevel: 'Junior (1-3 years)',
+                department: 'Product Development',
+                description: 'Build web features with React and Node.js. Learn from senior engineers. Write tests. Fix bugs. Grow your skills rapidly.',
+                skills: ['JavaScript', 'React', 'Node.js', 'HTML', 'CSS', 'Git', 'Learning Agility', 'Problem Solving'],
+                requirements: [
+                    '1+ year professional development experience',
+                    'Familiarity with JavaScript and React',
+                    'Basic understanding of backend development',
+                    'Strong willingness to learn',
+                    'Good communication skills'
+                ]
             },
             {
                 id: 'JOB-015',
-                title: 'Technical Writer - Developer Docs',
-                company: 'DocuTech Labs',
-                location: 'Remote (Global)',
-                salary: '$90K - $130K',
-                description: 'Create API documentation, tutorials, and guides for developer audiences.',
-                requirements: '3+ years technical writing. Strong understanding of APIs and development. Docs-as-code.',
-                skills: ['Technical Writing', 'API Documentation', 'Markdown', 'Git', 'APIs', 'Programming', 'Communication']
+                title: 'Junior Backend Developer',
+                company: 'Internal Engineering',
+                location: 'Austin, TX',
+                salary: '$80,000 - $105,000',
+                experienceLevel: 'Junior (1-3 years)',
+                department: 'Backend',
+                description: 'Write Python code for backend services. Work with APIs and databases. Learn system design. Collaborate with senior engineers.',
+                skills: ['Python', 'SQL', 'REST APIs', 'Git', 'PostgreSQL', 'Learning', 'Debugging', 'Testing'],
+                requirements: [
+                    '1+ year backend development experience',
+                    'Basic knowledge of Python and SQL',
+                    'Understanding of REST APIs',
+                    'Ability to debug and test code',
+                    'Strong desire to grow technically'
+                ]
             },
             {
                 id: 'JOB-016',
-                title: 'Site Reliability Engineer',
-                company: 'UpTime Systems',
-                location: 'Portland, OR (Remote)',
-                salary: '$155K - $200K',
-                description: 'Maintain 99.99% uptime, build monitoring, improve reliability, on-call rotation.',
-                requirements: '4+ years SRE/DevOps. Strong Linux, Kubernetes, distributed systems. Python/Go.',
-                skills: ['SRE', 'Linux', 'Kubernetes', 'Python', 'Monitoring', 'Incident Response', 'Distributed Systems', 'SLI/SLO']
+                title: 'Software Engineer I',
+                company: 'Internal Engineering',
+                location: 'San Francisco, CA',
+                salary: '$90,000 - $115,000',
+                experienceLevel: 'Entry (0-2 years)',
+                department: 'Engineering',
+                description: 'Start your engineering career. Work on real features. Participate in code reviews. Learn best practices. Mentorship provided.',
+                skills: ['Python', 'JavaScript', 'Git', 'Problem Solving', 'Teamwork', 'Communication', 'Learning'],
+                requirements: [
+                    '0-2 years professional experience',
+                    'Strong programming fundamentals',
+                    'Understanding of Git and version control',
+                    'Strong problem-solving skills',
+                    'Bachelor’s degree in Computer Science or equivalent experience'
+                ]
             },
-            // JUNIOR/ENTRY LEVEL (9 jobs)
             {
                 id: 'JOB-017',
-                title: 'Junior Software Developer',
-                company: 'Tech Academy',
-                location: 'Remote (US)',
-                salary: '$70K - $95K',
-                description: 'Start your career with mentorship from senior engineers. Learn best practices.',
-                requirements: '0-2 years or bootcamp grad. JavaScript, Python, or Java. Eager to learn.',
-                skills: ['JavaScript', 'Python', 'Git', 'HTML/CSS', 'REST APIs', 'Problem Solving']
+                title: 'Junior DevOps Engineer',
+                company: 'Internal Infrastructure',
+                location: 'Remote',
+                salary: '$85,000 - $110,000',
+                experienceLevel: 'Junior (1-3 years)',
+                department: 'Infrastructure',
+                description: 'Learn cloud infrastructure and automation. Work with AWS and Docker. Maintain CI/CD pipelines. Support senior DevOps engineers.',
+                skills: ['Linux', 'AWS', 'Docker', 'Git', 'Python', 'Bash', 'CI/CD', 'Learning'],
+                requirements: [
+                    '1+ year experience in infrastructure or DevOps',
+                    'Basic understanding of Linux systems',
+                    'Familiarity with AWS or cloud platforms',
+                    'Exposure to CI/CD pipelines',
+                    'Strong willingness to learn automation'
+                ]
             },
             {
                 id: 'JOB-018',
-                title: 'Associate Data Scientist',
-                company: 'DataStart Inc',
+                title: 'Data Engineer',
+                company: 'Internal Data Platform',
                 location: 'New York, NY',
-                salary: '$80K - $105K',
-                description: 'Apply ML to business problems, work with senior data scientists, learn and grow.',
-                requirements: 'Bachelor/Master in Stats/CS. 0-2 years. Python, Pandas, scikit-learn, SQL.',
-                skills: ['Python', 'Machine Learning', 'Pandas', 'SQL', 'Statistics', 'Data Analysis', 'scikit-learn']
+                salary: '$125,000 - $160,000',
+                experienceLevel: 'Mid-Senior (4-7 years)',
+                department: 'Data',
+                description: 'Build data pipelines processing millions of events. Work with Python, Airflow, and Spark. Design data models. Ensure data quality.',
+                skills: ['Python', 'SQL', 'Airflow', 'Spark', 'ETL', 'Data Modeling', 'PostgreSQL', 'AWS'],
+                requirements: [
+                    '4+ years data engineering experience',
+                    'Strong experience with ETL pipelines',
+                    'Experience with Airflow or workflow orchestration tools',
+                    'Strong SQL and data modeling skills',
+                    'Experience with large-scale data processing systems'
+                ]
             },
             {
                 id: 'JOB-019',
-                title: 'Frontend Developer (Junior)',
-                company: 'WebStudio',
-                location: 'Miami, FL',
-                salary: '$75K - $100K',
-                description: 'Build responsive websites for clients, grow frontend skills in creative environment.',
-                requirements: '1-3 years frontend. HTML5, CSS3, JavaScript, basic React. Eye for design.',
-                skills: ['HTML', 'CSS', 'JavaScript', 'React', 'Responsive Design', 'Git', 'Web Development']
+                title: 'Security Engineer',
+                company: 'Internal Security',
+                location: 'Remote',
+                salary: '$135,000 - $170,000',
+                experienceLevel: 'Mid-Senior (5-8 years)',
+                department: 'Security',
+                description: 'Build secure systems. Conduct security audits. Implement security controls. Respond to incidents. Ensure compliance.',
+                skills: ['Python', 'Security', 'AWS Security', 'Penetration Testing', 'Compliance', 'Incident Response', 'Automation'],
+                requirements: [
+                    '5+ years security engineering experience',
+                    'Experience conducting security audits',
+                    'Knowledge of cloud security best practices',
+                    'Experience with incident response processes',
+                    'Understanding of compliance frameworks'
+                ]
             },
             {
                 id: 'JOB-020',
-                title: 'Junior DevOps Engineer',
-                company: 'StartupCloud',
-                location: 'Remote',
-                salary: '$85K - $110K',
-                description: 'Learn DevOps and cloud infrastructure, automate deployments, maintain systems.',
-                requirements: '1-3 years IT/development. Basic Linux, AWS, Docker. Bash/Python scripting.',
-                skills: ['Linux', 'AWS', 'Docker', 'CI/CD', 'Python', 'Bash', 'Automation', 'Networking']
-            },
-            {
-                id: 'JOB-021',
-                title: 'Quality Assurance Engineer',
-                company: 'TestRight Software',
-                location: 'Phoenix, AZ',
-                salary: '$65K - $90K',
-                description: 'Ensure software quality through manual and automated testing. Learn QA practices.',
-                requirements: '0-3 years QA. Detail-oriented, testing mindset. Basic programming helpful.',
-                skills: ['Manual Testing', 'Test Cases', 'Bug Tracking', 'Attention to Detail', 'Communication']
-            },
-            {
-                id: 'JOB-022',
-                title: 'Technical Support Engineer',
-                company: 'SupportTech',
-                location: 'Remote',
-                salary: '$60K - $85K',
-                description: 'Provide technical support to customers, troubleshoot issues, help customers succeed.',
-                requirements: '0-2 years support. Strong problem-solving, excellent communication, technical aptitude.',
-                skills: ['Customer Support', 'Troubleshooting', 'Communication', 'Technical Aptitude', 'Documentation']
-            },
-            {
-                id: 'JOB-023',
-                title: 'Business Analyst',
-                company: 'ConsultCorp',
-                location: 'Chicago, IL',
-                salary: '$70K - $95K',
-                description: 'Bridge business and technology, gather requirements, analyze processes.',
-                requirements: '1-3 years business analysis. Strong analytical thinking, Excel, documentation skills.',
-                skills: ['Business Analysis', 'Requirements Gathering', 'Excel', 'Communication', 'Process Mapping', 'Documentation']
-            },
-            {
-                id: 'JOB-024',
-                title: 'UI/UX Designer',
-                company: 'CreativeDesign Co',
+                title: 'Machine Learning Engineer',
+                company: 'Internal ML Team',
                 location: 'San Francisco, CA',
-                salary: '$75K - $105K',
-                description: 'Design beautiful interfaces, create wireframes and prototypes, conduct user research.',
-                requirements: '1-4 years UI/UX design. Strong portfolio, Figma/Sketch proficiency, design principles.',
-                skills: ['UI Design', 'UX Design', 'Figma', 'Wireframing', 'Prototyping', 'User Research', 'Visual Design']
-            },
-            {
-                id: 'JOB-025',
-                title: 'Data Engineer (Junior)',
-                company: 'DataPipeline Inc',
-                location: 'Remote',
-                salary: '$85K - $115K',
-                description: 'Build data pipelines and infrastructure, learn modern data engineering practices.',
-                requirements: '1-3 years programming (Python preferred). Strong SQL, basic data modeling, cloud basics.',
-                skills: ['Python', 'SQL', 'ETL', 'Data Modeling', 'Cloud Basics', 'Data Pipelines', 'Problem Solving']
+                salary: '$140,000 - $180,000',
+                experienceLevel: 'Mid-Senior (4-7 years)',
+                department: 'Machine Learning',
+                description: 'Build and deploy ML models. Work with TensorFlow and PyTorch. Create ML pipelines. Monitor model performance in production.',
+                skills: ['Python', 'Machine Learning', 'TensorFlow', 'PyTorch', 'MLOps', 'AWS', 'Data Processing', 'APIs'],
+                requirements: [
+                    '4+ years experience in machine learning engineering',
+                    'Strong experience with TensorFlow or PyTorch',
+                    'Experience deploying ML models to production',
+                    'Understanding of MLOps best practices',
+                    'Strong programming skills in Python'
+                ]
             }
         ];
 
+
         // Load jobs on page load
-        window.addEventListener('DOMContentLoaded', function() {
+        window.addEventListener('DOMContentLoaded', function () {
             const jobsList = document.getElementById('jobsList');
-            
-            jobs.forEach(function(job) {
-                const skillTags = job.skills.map(function(skill) {
+
+            jobs.forEach(function (job) {
+                const skillTags = job.skills.map(function (skill) {
                     return '<span class="skill-tag">' + skill + '</span>';
                 }).join('');
 
-                jobsList.innerHTML += 
+                jobsList.innerHTML +=
                     '<div class="job-card">' +
-                        '<div class="job-header">' +
-                            '<div>' +
-                                '<div class="job-title">' + job.title + '</div>' +
-                                '<div class="job-company">' + job.company + '</div>' +
-                            '</div>' +
-                            '<div class="job-salary">' + job.salary + '</div>' +
-                        '</div>' +
-                        '<div class="job-meta">' +
-                            '<div class="job-meta-item">' +
-                                '<span>📍</span>' +
-                                job.location +
-                            '</div>' +
-                            '<div class="job-meta-item">' +
-                                '<span>💼</span>' +
-                                'Full-time' +
-                            '</div>' +
-                        '</div>' +
-                        '<div class="job-description">' + job.description + '</div>' +
-                        '<div class="job-requirements">' +
-                            '<strong>Requirements:</strong>' +
-                            job.requirements +
-                        '</div>' +
-                        '<div class="skills-tags">' +
-                            skillTags +
-                        '</div>' +
+                    '<div class="job-header">' +
+                    '<div>' +
+                    '<div class="job-title">' + job.title + '</div>' +
+                    '<div class="job-company">' + job.company + '</div>' +
+                    '</div>' +
+                    '<div class="job-salary">' + job.salary + '</div>' +
+                    '</div>' +
+                    '<div class="job-meta">' +
+                    '<div class="job-meta-item">' +
+                    '<span>📍</span>' +
+                    job.location +
+                    '</div>' +
+                    '<div class="job-meta-item">' +
+                    '<span>💼</span>' +
+                    'Full-time' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="job-description">' + job.description + '</div>' +
+                    '<div class="job-requirements">' +
+                    '<strong>Requirements:</strong>' +
+                    job.requirements +
+                    '</div>' +
+                    '<div class="skills-tags">' +
+                    skillTags +
+                    '</div>' +
                     '</div>';
             });
         });
@@ -715,18 +836,18 @@ Our AI will analyze this against all 25 jobs →"></textarea>
                     results = JSON.parse(responseText);
                 } catch (e) {
                     // If not JSON, treat as text
-                    results = { rawResponse: responseText };
+                    results = {rawResponse: responseText};
                 }
 
                 // Store whatever we got
                 sessionStorage.setItem('talentAIResults', JSON.stringify(results));
-                
+
                 // Hide loading
                 document.getElementById('loading').classList.remove('active');
-                
+
                 // Go to results page - let results.html handle the data
                 window.location.href = 'results.html';
-                
+
             } catch (error) {
                 console.error('Error:', error);
                 document.getElementById('loading').classList.remove('active');
@@ -736,4 +857,5 @@ Our AI will analyze this against all 25 jobs →"></textarea>
         }
     </script>
 </body>
+
 </html>
