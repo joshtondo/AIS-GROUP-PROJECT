@@ -57,9 +57,7 @@
             transition: gap 0.3s;
         }
 
-        .back-link:hover {
-            gap: 1rem;
-        }
+        .back-link:hover { gap: 1rem; }
 
         .demo-header h1 {
             font-size: 3rem;
@@ -284,54 +282,234 @@
             font-weight: 600;
         }
 
-        /* Loading State */
-        .loading {
+        /* =============================================
+           LOADING OVERLAY — full-screen, replaces old inline loading
+           ============================================= */
+        .loading-overlay {
             display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(13, 27, 42, 0.82);
+            backdrop-filter: blur(6px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loading-card {
+            background: white;
+            border-radius: 28px;
+            padding: 3rem 3.5rem;
+            max-width: 520px;
+            width: 90%;
             text-align: center;
-            padding: 2rem;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+            animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .loading.active {
-            display: block;
+        @keyframes popIn {
+            from { transform: scale(0.85); opacity: 0; }
+            to   { transform: scale(1);    opacity: 1; }
         }
 
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid #E5E7EB;
-            border-top-color: var(--accent);
+        /* Animated brain / AI icon */
+        .loading-icon {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 1.5rem;
+            position: relative;
+        }
+
+        .loading-icon .ring {
+            position: absolute;
+            inset: 0;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 1rem;
+            border: 4px solid transparent;
+            border-top-color: var(--accent);
+            animation: spin 1.2s linear infinite;
+        }
+
+        .loading-icon .ring-2 {
+            inset: 8px;
+            border-top-color: var(--bright);
+            animation-duration: 0.8s;
+            animation-direction: reverse;
+        }
+
+        .loading-icon .center-dot {
+            position: absolute;
+            inset: 22px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
         }
 
         @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-card h2 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        /* Step messages */
+        .loading-steps {
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+
+        .loading-step {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.6rem 0;
+            font-size: 0.95rem;
+            color: #9CA3AF;
+            transition: color 0.4s, transform 0.4s;
+        }
+
+        .loading-step.active {
+            color: var(--dark);
+            font-weight: 600;
+            transform: translateX(4px);
+        }
+
+        .loading-step.done {
+            color: var(--success);
+        }
+
+        .step-icon {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid #E5E7EB;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            flex-shrink: 0;
+            transition: background 0.4s, border-color 0.4s;
+        }
+
+        .loading-step.active .step-icon {
+            border-color: var(--accent);
+            background: #EFF6FF;
+            animation: pulse-dot 1s ease-in-out infinite;
+        }
+
+        .loading-step.done .step-icon {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(62, 146, 204, 0.4); }
+            50%       { box-shadow: 0 0 0 5px rgba(62, 146, 204, 0); }
+        }
+
+        /* Progress bar */
+        .loading-progress-track {
+            height: 6px;
+            background: #F3F4F6;
+            border-radius: 3px;
+            margin-top: 1.5rem;
+            overflow: hidden;
+        }
+
+        .loading-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--bright));
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.8s ease;
+        }
+
+        .loading-footer-note {
+            margin-top: 1rem;
+            font-size: 0.82rem;
+            color: #9CA3AF;
         }
 
         /* Responsive */
         @media (max-width: 1024px) {
-            .demo-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .upload-section {
-                position: static;
-            }
+            .demo-grid { grid-template-columns: 1fr; }
+            .upload-section { position: static; }
         }
     </style>
 </head>
 
 <body>
+
+    <!-- ===================== LOADING OVERLAY ===================== -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-card">
+            <div class="loading-icon">
+                <div class="ring"></div>
+                <div class="ring ring-2"></div>
+                <div class="center-dot">🧠</div>
+            </div>
+            <h2>Analyzing Your Profile</h2>
+
+            <div class="loading-steps" id="loadingSteps">
+                <div class="loading-step" data-step="0">
+                    <div class="step-icon">1</div>
+                    <span>Reading your profile</span>
+                </div>
+                <div class="loading-step" data-step="1">
+                    <div class="step-icon">2</div>
+                    <span>Scanning 20 internal opportunities</span>
+                </div>
+                <div class="loading-step" data-step="2">
+                    <div class="step-icon">3</div>
+                    <span>Running semantic match analysis</span>
+                </div>
+                <div class="loading-step" data-step="3">
+                    <div class="step-icon">4</div>
+                    <span>Scoring skill alignment &amp; gaps</span>
+                </div>
+                <div class="loading-step" data-step="4">
+                    <div class="step-icon">5</div>
+                    <span>Building your upskilling plans</span>
+                </div>
+                <div class="loading-step" data-step="5">
+                    <div class="step-icon">6</div>
+                    <span>Running fairness &amp; bias checks</span>
+                </div>
+                <div class="loading-step" data-step="6">
+                    <div class="step-icon">7</div>
+                    <span>Finalizing your top 5 matches</span>
+                </div>
+            </div>
+
+            <div class="loading-progress-track">
+                <div class="loading-progress-fill" id="loadingProgressFill"></div>
+            </div>
+
+            <p class="loading-footer-note">This typically takes 60–90 seconds — worth the wait ✨</p>
+        </div>
+    </div>
+    <!-- =========================================================== -->
+
     <div class="container">
         <div class="demo-header">
             <a href="index.html" class="back-link">← Back to Home</a>
             <div class="badge">🎯 AI-Powered Job Matching</div>
             <h1>Discover Internal Opportunities</h1>
-            <p>Enter your employee profile below and our AI will analyze it against 20 job opportunities to find your
-                best fits. No keyword matching - pure semantic understanding powered by Claude AI.</p>
+            <p>Enter your employee profile below and our AI will analyze it against available job opportunities to find your
+                best fits. No keyword matching — pure semantic understanding powered by Claude AI.</p>
         </div>
 
         <div class="demo-grid">
@@ -352,7 +530,7 @@ Include:
 • Education and certifications
 • Any relevant projects
 
-Our AI will analyze this against all 20 jobs →"></textarea>
+Our AI will analyze this against all available jobs →"></textarea>
 
                 <p class="help-text">
                     💡 Tip: The more detailed your profile is, the better the matches! Include specific technologies,
@@ -362,13 +540,6 @@ Our AI will analyze this against all 20 jobs →"></textarea>
                 <button class="analyze-button" id="analyzeBtn" onclick="analyzeResume()">
                     🚀 Find Internal Opportunities
                 </button>
-
-                <!-- Loading State -->
-                <div class="loading" id="loading">
-                    <div class="spinner"></div>
-                    <p style="color: #6B7280; font-weight: 600;">AI analyzing your profile against 20 jobs...</p>
-                    <p style="color: #9CA3AF; font-size: 0.9rem; margin-top: 0.5rem;">This may take 30-60 seconds</p>
-                </div>
             </div>
 
             <!-- Jobs Listing Column -->
@@ -378,12 +549,10 @@ Our AI will analyze this against all 20 jobs →"></textarea>
                         <span>💼</span>
                         Available Positions
                     </h2>
-                    <div class="job-count">20 Jobs</div>
+                    <div class="job-count" id="jobCountBadge">Loading...</div>
                 </div>
 
-                <div id="jobsList">
-                    <!-- Jobs will be loaded here by JavaScript -->
-                </div>
+                <div id="jobsList"></div>
             </div>
         </div>
     </div>
@@ -391,377 +560,172 @@ Our AI will analyze this against all 20 jobs →"></textarea>
     <script>
         // All 20 mock jobs
         const jobs = [
-            // SENIOR SOFTWARE ENGINEERING (5)
             {
-                id: 'JOB-001',
-                title: 'Senior Full Stack Engineer',
-                company: 'Internal Engineering',
-                location: 'Austin, TX (Hybrid)',
-                salary: '$150,000 - $190,000',
-                experienceLevel: 'Senior (5-8 years)',
-                department: 'Product Engineering',
+                id: 'JOB-001', title: 'Senior Full Stack Engineer', company: 'Internal Engineering',
+                location: 'Austin, TX (Hybrid)', salary: '$150,000 - $190,000',
+                experienceLevel: 'Senior (5-8 years)', department: 'Product Engineering',
                 description: 'Lead development of our core platform serving 2M+ users. Build scalable microservices with Python and React. Mentor junior engineers and drive technical excellence.',
                 skills: ['Python', 'JavaScript', 'React', 'Node.js', 'PostgreSQL', 'AWS', 'Docker', 'Microservices', 'Leadership'],
-                requirements: [
-                    '5+ years professional software engineering experience',
-                    'Strong experience with Python and modern JavaScript frameworks',
-                    'Experience designing scalable distributed systems',
-                    'Experience mentoring engineers',
-                    'Bachelor’s degree in Computer Science or equivalent experience'
-                ]
+                requirements: ['5+ years professional software engineering experience', 'Strong experience with Python and modern JavaScript frameworks', 'Experience designing scalable distributed systems', 'Experience mentoring engineers', 'Bachelor\'s degree in Computer Science or equivalent experience']
             },
             {
-                id: 'JOB-002',
-                title: 'Senior Backend Engineer',
-                company: 'Internal Platform Team',
-                location: 'Remote',
-                salary: '$145,000 - $180,000',
-                experienceLevel: 'Senior (5-8 years)',
-                department: 'Platform Engineering',
+                id: 'JOB-002', title: 'Senior Backend Engineer', company: 'Internal Platform Team',
+                location: 'Remote', salary: '$145,000 - $180,000',
+                experienceLevel: 'Senior (5-8 years)', department: 'Platform Engineering',
                 description: 'Design and build backend systems handling millions of API requests daily. Work with Python, Django, PostgreSQL, and Redis. Optimize performance and scalability.',
                 skills: ['Python', 'Django', 'PostgreSQL', 'Redis', 'REST APIs', 'AWS', 'System Design', 'Performance Optimization'],
-                requirements: [
-                    '5+ years backend development experience',
-                    'Deep experience with Python and Django',
-                    'Strong database design skills',
-                    'Experience with high-traffic APIs',
-                    'Bachelor’s degree or equivalent experience'
-                ]
+                requirements: ['5+ years backend development experience', 'Deep experience with Python and Django', 'Strong database design skills', 'Experience with high-traffic APIs', 'Bachelor\'s degree or equivalent experience']
             },
             {
-                id: 'JOB-003',
-                title: 'Senior Frontend Engineer',
-                company: 'Internal UX Team',
-                location: 'San Francisco, CA (Hybrid)',
-                salary: '$140,000 - $175,000',
-                experienceLevel: 'Senior (5-7 years)',
-                department: 'User Experience',
+                id: 'JOB-003', title: 'Senior Frontend Engineer', company: 'Internal UX Team',
+                location: 'San Francisco, CA (Hybrid)', salary: '$140,000 - $175,000',
+                experienceLevel: 'Senior (5-7 years)', department: 'User Experience',
                 description: 'Build beautiful, responsive web applications with React and TypeScript. Work closely with designers to create exceptional user experiences. Lead frontend architecture decisions.',
                 skills: ['React', 'TypeScript', 'JavaScript', 'CSS', 'HTML5', 'Redux', 'Next.js', 'Performance', 'Accessibility'],
-                requirements: [
-                    '5+ years frontend development experience',
-                    'Expert knowledge of React and TypeScript',
-                    'Strong understanding of modern frontend architecture',
-                    'Experience leading frontend initiatives',
-                    'Strong UI/UX collaboration skills'
-                ]
+                requirements: ['5+ years frontend development experience', 'Expert knowledge of React and TypeScript', 'Strong understanding of modern frontend architecture', 'Experience leading frontend initiatives', 'Strong UI/UX collaboration skills']
             },
             {
-                id: 'JOB-004',
-                title: 'Staff Software Engineer',
-                company: 'Internal Architecture Team',
-                location: 'Austin, TX',
-                salary: '$165,000 - $210,000',
-                experienceLevel: 'Staff (8+ years)',
-                department: 'Engineering Architecture',
+                id: 'JOB-004', title: 'Staff Software Engineer', company: 'Internal Architecture Team',
+                location: 'Austin, TX', salary: '$165,000 - $210,000',
+                experienceLevel: 'Staff (8+ years)', department: 'Engineering Architecture',
                 description: 'Own technical direction for critical systems. Design solutions at scale. Drive engineering best practices across teams. Mentor senior engineers.',
                 skills: ['Python', 'System Design', 'Architecture', 'Leadership', 'Microservices', 'Cloud', 'Performance', 'Mentoring'],
-                requirements: [
-                    '8+ years professional engineering experience',
-                    'Proven experience designing large-scale systems',
-                    'Experience leading cross-team technical initiatives',
-                    'Strong architectural decision-making skills',
-                    'Track record of mentoring senior engineers'
-                ]
+                requirements: ['8+ years professional engineering experience', 'Proven experience designing large-scale systems', 'Experience leading cross-team technical initiatives', 'Strong architectural decision-making skills', 'Track record of mentoring senior engineers']
             },
             {
-                id: 'JOB-005',
-                title: 'Engineering Manager - Backend',
-                company: 'Internal Engineering',
-                location: 'Austin, TX (Hybrid)',
-                salary: '$155,000 - $195,000',
-                experienceLevel: 'Manager (6+ years with 2+ leadership)',
-                department: 'Backend Engineering',
+                id: 'JOB-005', title: 'Engineering Manager - Backend', company: 'Internal Engineering',
+                location: 'Austin, TX (Hybrid)', salary: '$155,000 - $195,000',
+                experienceLevel: 'Manager (6+ years with 2+ leadership)', department: 'Backend Engineering',
                 description: 'Lead team of 6-8 backend engineers. Balance hands-on technical work with people management. Drive roadmap planning and technical strategy.',
                 skills: ['Engineering Management', 'Python', 'System Design', 'Leadership', 'Team Building', 'Technical Strategy'],
-                requirements: [
-                    '6+ years engineering experience',
-                    '2+ years people management experience',
-                    'Strong backend system design skills',
-                    'Experience hiring and mentoring engineers',
-                    'Strong communication and leadership skills'
-                ]
+                requirements: ['6+ years engineering experience', '2+ years people management experience', 'Strong backend system design skills', 'Experience hiring and mentoring engineers', 'Strong communication and leadership skills']
             },
-
-            // MID-LEVEL SOFTWARE ENGINEERING (8)
             {
-                id: 'JOB-006',
-                title: 'Full Stack Developer',
-                company: 'Internal Product Team',
-                location: 'Remote',
-                salary: '$115,000 - $145,000',
-                experienceLevel: 'Mid-Level (3-5 years)',
-                department: 'Product Development',
+                id: 'JOB-006', title: 'Full Stack Developer', company: 'Internal Product Team',
+                location: 'Remote', salary: '$115,000 - $145,000',
+                experienceLevel: 'Mid-Level (3-5 years)', department: 'Product Development',
                 description: 'Build features end-to-end using React and Node.js. Work across the full stack. Collaborate with product managers and designers. Ship code daily.',
                 skills: ['JavaScript', 'React', 'Node.js', 'MongoDB', 'REST APIs', 'Git', 'Agile', 'Problem Solving'],
-                requirements: [
-                    '3+ years full stack development experience',
-                    'Experience with React and Node.js',
-                    'Experience working in Agile teams',
-                    'Strong problem-solving skills',
-                    'Bachelor’s degree or equivalent experience'
-                ]
+                requirements: ['3+ years full stack development experience', 'Experience with React and Node.js', 'Experience working in Agile teams', 'Strong problem-solving skills', 'Bachelor\'s degree or equivalent experience']
             },
             {
-                id: 'JOB-007',
-                title: 'Backend Developer',
-                company: 'Internal Data Team',
-                location: 'Chicago, IL',
-                salary: '$120,000 - $150,000',
-                experienceLevel: 'Mid-Level (3-5 years)',
-                department: 'Data Engineering',
+                id: 'JOB-007', title: 'Backend Developer', company: 'Internal Data Team',
+                location: 'Chicago, IL', salary: '$120,000 - $150,000',
+                experienceLevel: 'Mid-Level (3-5 years)', department: 'Data Engineering',
                 description: 'Build data processing pipelines and APIs. Work with Python, FastAPI, and PostgreSQL. Process millions of records daily. Optimize database performance.',
                 skills: ['Python', 'FastAPI', 'PostgreSQL', 'SQL', 'REST APIs', 'ETL', 'Data Processing', 'AWS'],
-                requirements: [
-                    '3+ years backend development experience',
-                    'Strong Python and SQL skills',
-                    'Experience building APIs',
-                    'Experience with relational databases',
-                    'Familiarity with AWS'
-                ]
+                requirements: ['3+ years backend development experience', 'Strong Python and SQL skills', 'Experience building APIs', 'Experience with relational databases', 'Familiarity with AWS']
             },
             {
-                id: 'JOB-008',
-                title: 'DevOps Engineer',
-                company: 'Internal Infrastructure',
-                location: 'Remote',
-                salary: '$125,000 - $155,000',
-                experienceLevel: 'Mid-Level (3-5 years)',
-                department: 'Infrastructure',
+                id: 'JOB-008', title: 'DevOps Engineer', company: 'Internal Infrastructure',
+                location: 'Remote', salary: '$125,000 - $155,000',
+                experienceLevel: 'Mid-Level (3-5 years)', department: 'Infrastructure',
                 description: 'Manage AWS infrastructure and CI/CD pipelines. Work with Kubernetes, Docker, and Terraform. Ensure 99.9% uptime. Automate everything.',
                 skills: ['AWS', 'Kubernetes', 'Docker', 'Terraform', 'CI/CD', 'Python', 'Linux', 'Automation'],
-                requirements: [
-                    '3+ years DevOps or infrastructure experience',
-                    'Experience with AWS and Kubernetes',
-                    'Strong Linux skills',
-                    'Experience building CI/CD pipelines',
-                    'Automation mindset'
-                ]
+                requirements: ['3+ years DevOps or infrastructure experience', 'Experience with AWS and Kubernetes', 'Strong Linux skills', 'Experience building CI/CD pipelines', 'Automation mindset']
             },
             {
-                id: 'JOB-009',
-                title: 'Python Developer',
-                company: 'Internal Analytics Team',
-                location: 'New York, NY',
-                salary: '$110,000 - $140,000',
-                experienceLevel: 'Mid-Level (3-5 years)',
-                department: 'Analytics',
+                id: 'JOB-009', title: 'Python Developer', company: 'Internal Analytics Team',
+                location: 'New York, NY', salary: '$110,000 - $140,000',
+                experienceLevel: 'Mid-Level (3-5 years)', department: 'Analytics',
                 description: 'Build data analysis tools and automation scripts. Work with Python, pandas, and SQL. Create dashboards and reports. Support data-driven decision making.',
                 skills: ['Python', 'Pandas', 'SQL', 'Data Analysis', 'APIs', 'Flask', 'PostgreSQL', 'Visualization'],
-                requirements: [
-                    '3+ years Python development experience',
-                    'Experience with data analysis libraries',
-                    'Strong SQL skills',
-                    'Experience building dashboards or reports',
-                    'Strong analytical thinking'
-                ]
+                requirements: ['3+ years Python development experience', 'Experience with data analysis libraries', 'Strong SQL skills', 'Experience building dashboards or reports', 'Strong analytical thinking']
             },
             {
-                id: 'JOB-010',
-                title: 'Site Reliability Engineer',
-                company: 'Internal SRE Team',
-                location: 'Seattle, WA',
-                salary: '$130,000 - $165,000',
-                experienceLevel: 'Mid-Level (4-6 years)',
-                department: 'Site Reliability',
+                id: 'JOB-010', title: 'Site Reliability Engineer', company: 'Internal SRE Team',
+                location: 'Seattle, WA', salary: '$130,000 - $165,000',
+                experienceLevel: 'Mid-Level (4-6 years)', department: 'Site Reliability',
                 description: 'Ensure system reliability and performance. Build monitoring and alerting. Participate in on-call rotation. Improve deployment processes.',
                 skills: ['Python', 'Kubernetes', 'Monitoring', 'AWS', 'Linux', 'Incident Response', 'Automation', 'SRE'],
-                requirements: [
-                    '4+ years SRE or infrastructure experience',
-                    'Experience with monitoring tools',
-                    'Strong troubleshooting skills',
-                    'Experience with Kubernetes',
-                    'Willingness to participate in on-call rotation'
-                ]
+                requirements: ['4+ years SRE or infrastructure experience', 'Experience with monitoring tools', 'Strong troubleshooting skills', 'Experience with Kubernetes', 'Willingness to participate in on-call rotation']
             },
-
-            // Remaining jobs (011–020) follow same structure with tailored requirements...
             {
-                id: 'JOB-011',
-                title: 'Frontend Developer',
-                company: 'Internal Web Team',
-                location: 'Los Angeles, CA',
-                salary: '$105,000 - $135,000',
-                experienceLevel: 'Mid-Level (3-5 years)',
-                department: 'Web Development',
+                id: 'JOB-011', title: 'Frontend Developer', company: 'Internal Web Team',
+                location: 'Los Angeles, CA', salary: '$105,000 - $135,000',
+                experienceLevel: 'Mid-Level (3-5 years)', department: 'Web Development',
                 description: 'Build responsive web interfaces with React. Implement pixel-perfect designs. Optimize performance. Write clean, maintainable code.',
                 skills: ['React', 'JavaScript', 'TypeScript', 'CSS', 'HTML', 'Redux', 'Webpack', 'Performance'],
-                requirements: [
-                    '3+ years frontend development experience',
-                    'Strong proficiency in React and TypeScript',
-                    'Experience translating design mockups into production code',
-                    'Understanding of performance optimization techniques',
-                    'Experience with modern build tools'
-                ]
+                requirements: ['3+ years frontend development experience', 'Strong proficiency in React and TypeScript', 'Experience translating design mockups into production code', 'Understanding of performance optimization techniques', 'Experience with modern build tools']
             },
             {
-                id: 'JOB-012',
-                title: 'Cloud Engineer',
-                company: 'Internal Cloud Team',
-                location: 'Remote',
-                salary: '$120,000 - $150,000',
-                experienceLevel: 'Mid-Level (3-5 years)',
-                department: 'Cloud Infrastructure',
+                id: 'JOB-012', title: 'Cloud Engineer', company: 'Internal Cloud Team',
+                location: 'Remote', salary: '$120,000 - $150,000',
+                experienceLevel: 'Mid-Level (3-5 years)', department: 'Cloud Infrastructure',
                 description: 'Design and manage cloud infrastructure on AWS. Implement infrastructure as code with Terraform. Optimize costs and performance.',
                 skills: ['AWS', 'Terraform', 'CloudFormation', 'Python', 'Networking', 'Security', 'Cost Optimization'],
-                requirements: [
-                    '3+ years cloud infrastructure experience',
-                    'Strong experience with AWS services',
-                    'Experience with Terraform or infrastructure as code',
-                    'Understanding of networking and security best practices',
-                    'Experience optimizing cloud costs'
-                ]
+                requirements: ['3+ years cloud infrastructure experience', 'Strong experience with AWS services', 'Experience with Terraform or infrastructure as code', 'Understanding of networking and security best practices', 'Experience optimizing cloud costs']
             },
             {
-                id: 'JOB-013',
-                title: 'API Developer',
-                company: 'Internal Platform',
-                location: 'Austin, TX',
-                salary: '$115,000 - $145,000',
-                experienceLevel: 'Mid-Level (3-5 years)',
-                department: 'Platform',
+                id: 'JOB-013', title: 'API Developer', company: 'Internal Platform',
+                location: 'Austin, TX', salary: '$115,000 - $145,000',
+                experienceLevel: 'Mid-Level (3-5 years)', department: 'Platform',
                 description: 'Design and build RESTful APIs. Work with Python and FastAPI. Ensure API performance and reliability. Write comprehensive documentation.',
                 skills: ['Python', 'FastAPI', 'REST APIs', 'PostgreSQL', 'Redis', 'API Design', 'Documentation', 'Testing'],
-                requirements: [
-                    '3+ years backend or API development experience',
-                    'Strong experience building RESTful services',
-                    'Experience with FastAPI or similar frameworks',
-                    'Knowledge of database design principles',
-                    'Ability to write clear technical documentation'
-                ]
+                requirements: ['3+ years backend or API development experience', 'Strong experience building RESTful services', 'Experience with FastAPI or similar frameworks', 'Knowledge of database design principles', 'Ability to write clear technical documentation']
             },
             {
-                id: 'JOB-014',
-                title: 'Junior Full Stack Developer',
-                company: 'Internal Development',
-                location: 'Remote',
-                salary: '$85,000 - $110,000',
-                experienceLevel: 'Junior (1-3 years)',
-                department: 'Product Development',
+                id: 'JOB-014', title: 'Junior Full Stack Developer', company: 'Internal Development',
+                location: 'Remote', salary: '$85,000 - $110,000',
+                experienceLevel: 'Junior (1-3 years)', department: 'Product Development',
                 description: 'Build web features with React and Node.js. Learn from senior engineers. Write tests. Fix bugs. Grow your skills rapidly.',
                 skills: ['JavaScript', 'React', 'Node.js', 'HTML', 'CSS', 'Git', 'Learning Agility', 'Problem Solving'],
-                requirements: [
-                    '1+ year professional development experience',
-                    'Familiarity with JavaScript and React',
-                    'Basic understanding of backend development',
-                    'Strong willingness to learn',
-                    'Good communication skills'
-                ]
+                requirements: ['1+ year professional development experience', 'Familiarity with JavaScript and React', 'Basic understanding of backend development', 'Strong willingness to learn', 'Good communication skills']
             },
             {
-                id: 'JOB-015',
-                title: 'Junior Backend Developer',
-                company: 'Internal Engineering',
-                location: 'Austin, TX',
-                salary: '$80,000 - $105,000',
-                experienceLevel: 'Junior (1-3 years)',
-                department: 'Backend',
+                id: 'JOB-015', title: 'Junior Backend Developer', company: 'Internal Engineering',
+                location: 'Austin, TX', salary: '$80,000 - $105,000',
+                experienceLevel: 'Junior (1-3 years)', department: 'Backend',
                 description: 'Write Python code for backend services. Work with APIs and databases. Learn system design. Collaborate with senior engineers.',
                 skills: ['Python', 'SQL', 'REST APIs', 'Git', 'PostgreSQL', 'Learning', 'Debugging', 'Testing'],
-                requirements: [
-                    '1+ year backend development experience',
-                    'Basic knowledge of Python and SQL',
-                    'Understanding of REST APIs',
-                    'Ability to debug and test code',
-                    'Strong desire to grow technically'
-                ]
+                requirements: ['1+ year backend development experience', 'Basic knowledge of Python and SQL', 'Understanding of REST APIs', 'Ability to debug and test code', 'Strong desire to grow technically']
             },
             {
-                id: 'JOB-016',
-                title: 'Software Engineer I',
-                company: 'Internal Engineering',
-                location: 'San Francisco, CA',
-                salary: '$90,000 - $115,000',
-                experienceLevel: 'Entry (0-2 years)',
-                department: 'Engineering',
+                id: 'JOB-016', title: 'Software Engineer I', company: 'Internal Engineering',
+                location: 'San Francisco, CA', salary: '$90,000 - $115,000',
+                experienceLevel: 'Entry (0-2 years)', department: 'Engineering',
                 description: 'Start your engineering career. Work on real features. Participate in code reviews. Learn best practices. Mentorship provided.',
                 skills: ['Python', 'JavaScript', 'Git', 'Problem Solving', 'Teamwork', 'Communication', 'Learning'],
-                requirements: [
-                    '0-2 years professional experience',
-                    'Strong programming fundamentals',
-                    'Understanding of Git and version control',
-                    'Strong problem-solving skills',
-                    'Bachelor’s degree in Computer Science or equivalent experience'
-                ]
+                requirements: ['0-2 years professional experience', 'Strong programming fundamentals', 'Understanding of Git and version control', 'Strong problem-solving skills', 'Bachelor\'s degree in Computer Science or equivalent experience']
             },
             {
-                id: 'JOB-017',
-                title: 'Junior DevOps Engineer',
-                company: 'Internal Infrastructure',
-                location: 'Remote',
-                salary: '$85,000 - $110,000',
-                experienceLevel: 'Junior (1-3 years)',
-                department: 'Infrastructure',
+                id: 'JOB-017', title: 'Junior DevOps Engineer', company: 'Internal Infrastructure',
+                location: 'Remote', salary: '$85,000 - $110,000',
+                experienceLevel: 'Junior (1-3 years)', department: 'Infrastructure',
                 description: 'Learn cloud infrastructure and automation. Work with AWS and Docker. Maintain CI/CD pipelines. Support senior DevOps engineers.',
                 skills: ['Linux', 'AWS', 'Docker', 'Git', 'Python', 'Bash', 'CI/CD', 'Learning'],
-                requirements: [
-                    '1+ year experience in infrastructure or DevOps',
-                    'Basic understanding of Linux systems',
-                    'Familiarity with AWS or cloud platforms',
-                    'Exposure to CI/CD pipelines',
-                    'Strong willingness to learn automation'
-                ]
+                requirements: ['1+ year experience in infrastructure or DevOps', 'Basic understanding of Linux systems', 'Familiarity with AWS or cloud platforms', 'Exposure to CI/CD pipelines', 'Strong willingness to learn automation']
             },
             {
-                id: 'JOB-018',
-                title: 'Data Engineer',
-                company: 'Internal Data Platform',
-                location: 'New York, NY',
-                salary: '$125,000 - $160,000',
-                experienceLevel: 'Mid-Senior (4-7 years)',
-                department: 'Data',
+                id: 'JOB-018', title: 'Data Engineer', company: 'Internal Data Platform',
+                location: 'New York, NY', salary: '$125,000 - $160,000',
+                experienceLevel: 'Mid-Senior (4-7 years)', department: 'Data',
                 description: 'Build data pipelines processing millions of events. Work with Python, Airflow, and Spark. Design data models. Ensure data quality.',
                 skills: ['Python', 'SQL', 'Airflow', 'Spark', 'ETL', 'Data Modeling', 'PostgreSQL', 'AWS'],
-                requirements: [
-                    '4+ years data engineering experience',
-                    'Strong experience with ETL pipelines',
-                    'Experience with Airflow or workflow orchestration tools',
-                    'Strong SQL and data modeling skills',
-                    'Experience with large-scale data processing systems'
-                ]
+                requirements: ['4+ years data engineering experience', 'Strong experience with ETL pipelines', 'Experience with Airflow or workflow orchestration tools', 'Strong SQL and data modeling skills', 'Experience with large-scale data processing systems']
             },
             {
-                id: 'JOB-019',
-                title: 'Security Engineer',
-                company: 'Internal Security',
-                location: 'Remote',
-                salary: '$135,000 - $170,000',
-                experienceLevel: 'Mid-Senior (5-8 years)',
-                department: 'Security',
+                id: 'JOB-019', title: 'Security Engineer', company: 'Internal Security',
+                location: 'Remote', salary: '$135,000 - $170,000',
+                experienceLevel: 'Mid-Senior (5-8 years)', department: 'Security',
                 description: 'Build secure systems. Conduct security audits. Implement security controls. Respond to incidents. Ensure compliance.',
                 skills: ['Python', 'Security', 'AWS Security', 'Penetration Testing', 'Compliance', 'Incident Response', 'Automation'],
-                requirements: [
-                    '5+ years security engineering experience',
-                    'Experience conducting security audits',
-                    'Knowledge of cloud security best practices',
-                    'Experience with incident response processes',
-                    'Understanding of compliance frameworks'
-                ]
+                requirements: ['5+ years security engineering experience', 'Experience conducting security audits', 'Knowledge of cloud security best practices', 'Experience with incident response processes', 'Understanding of compliance frameworks']
             },
             {
-                id: 'JOB-020',
-                title: 'Machine Learning Engineer',
-                company: 'Internal ML Team',
-                location: 'San Francisco, CA',
-                salary: '$140,000 - $180,000',
-                experienceLevel: 'Mid-Senior (4-7 years)',
-                department: 'Machine Learning',
+                id: 'JOB-020', title: 'Machine Learning Engineer', company: 'Internal ML Team',
+                location: 'San Francisco, CA', salary: '$140,000 - $180,000',
+                experienceLevel: 'Mid-Senior (4-7 years)', department: 'Machine Learning',
                 description: 'Build and deploy ML models. Work with TensorFlow and PyTorch. Create ML pipelines. Monitor model performance in production.',
                 skills: ['Python', 'Machine Learning', 'TensorFlow', 'PyTorch', 'MLOps', 'AWS', 'Data Processing', 'APIs'],
-                requirements: [
-                    '4+ years experience in machine learning engineering',
-                    'Strong experience with TensorFlow or PyTorch',
-                    'Experience deploying ML models to production',
-                    'Understanding of MLOps best practices',
-                    'Strong programming skills in Python'
-                ]
+                requirements: ['4+ years experience in machine learning engineering', 'Strong experience with TensorFlow or PyTorch', 'Experience deploying ML models to production', 'Understanding of MLOps best practices', 'Strong programming skills in Python']
             }
         ];
-
 
         // Load jobs on page load
         window.addEventListener('DOMContentLoaded', function () {
             const jobsList = document.getElementById('jobsList');
+            document.getElementById('jobCountBadge').textContent = jobs.length + ' Jobs';
 
             jobs.forEach(function (job) {
                 const skillTags = job.skills.map(function (skill) {
@@ -778,28 +742,85 @@ Our AI will analyze this against all 20 jobs →"></textarea>
                     '<div class="job-salary">' + job.salary + '</div>' +
                     '</div>' +
                     '<div class="job-meta">' +
-                    '<div class="job-meta-item">' +
-                    '<span>📍</span>' +
-                    job.location +
-                    '</div>' +
-                    '<div class="job-meta-item">' +
-                    '<span>💼</span>' +
-                    'Full-time' +
-                    '</div>' +
+                    '<div class="job-meta-item"><span>📍</span>' + job.location + '</div>' +
+                    '<div class="job-meta-item"><span>💼</span>Full-time</div>' +
                     '</div>' +
                     '<div class="job-description">' + job.description + '</div>' +
-                    '<div class="job-requirements">' +
-                    '<strong>Requirements:</strong>' +
-                    job.requirements +
-                    '</div>' +
-                    '<div class="skills-tags">' +
-                    skillTags +
-                    '</div>' +
+                    '<div class="job-requirements"><strong>Requirements:</strong>' + job.requirements.join(' · ') + '</div>' +
+                    '<div class="skills-tags">' + skillTags + '</div>' +
                     '</div>';
             });
         });
 
-        // SIMPLIFIED analyze function - accepts ANY valid JSON response
+        // ── Loading state machine ──────────────────────────────────────
+        const STEP_TIMINGS = [2000, 5000, 10000, 20000, 40000, 65000, 85000]; // ms after start when each step activates
+        let stepTimer = null;
+
+        function startLoadingAnimation() {
+            const overlay = document.getElementById('loadingOverlay');
+            const steps = overlay.querySelectorAll('.loading-step');
+            const fill = document.getElementById('loadingProgressFill');
+            const startTime = Date.now();
+
+            overlay.classList.add('active');
+
+            // Activate step 0 immediately
+            steps[0].classList.add('active');
+            fill.style.width = '5%';
+
+            function tick() {
+                const elapsed = Date.now() - startTime;
+                const totalSteps = STEP_TIMINGS.length;
+
+                // Find the latest step that should be active
+                let currentStep = 0;
+                for (let i = 0; i < STEP_TIMINGS.length; i++) {
+                    if (elapsed >= STEP_TIMINGS[i]) currentStep = i + 1;
+                }
+                currentStep = Math.min(currentStep, totalSteps - 1);
+
+                steps.forEach((step, i) => {
+                    step.classList.remove('active', 'done');
+                    if (i < currentStep) {
+                        step.classList.add('done');
+                        step.querySelector('.step-icon').textContent = '✓';
+                    } else if (i === currentStep) {
+                        step.classList.add('active');
+                        step.querySelector('.step-icon').textContent = i + 1;
+                    } else {
+                        step.querySelector('.step-icon').textContent = i + 1;
+                    }
+                });
+
+                // Progress bar: 5% → 95% across estimated 90s total
+                const progressPct = Math.min(5 + (elapsed / 90000) * 90, 95);
+                fill.style.width = progressPct + '%';
+
+                stepTimer = setTimeout(tick, 500);
+            }
+
+            stepTimer = setTimeout(tick, 500);
+        }
+
+        function stopLoadingAnimation() {
+            clearTimeout(stepTimer);
+            const overlay = document.getElementById('loadingOverlay');
+            const steps = overlay.querySelectorAll('.loading-step');
+            const fill = document.getElementById('loadingProgressFill');
+
+            // Complete all steps
+            steps.forEach(step => {
+                step.classList.remove('active');
+                step.classList.add('done');
+                step.querySelector('.step-icon').textContent = '✓';
+            });
+            fill.style.width = '100%';
+
+            // Brief pause so user sees completion before redirect
+            setTimeout(() => overlay.classList.remove('active'), 400);
+        }
+
+        // ── Main analyze function ──────────────────────────────────────
         async function analyzeResume() {
             const resumeText = document.getElementById('resumeText').value;
 
@@ -808,17 +829,13 @@ Our AI will analyze this against all 20 jobs →"></textarea>
                 return;
             }
 
-            // Show loading
-            document.getElementById('loading').classList.add('active');
             document.getElementById('analyzeBtn').disabled = true;
+            startLoadingAnimation();
 
             try {
-                // Call n8n webhook
                 const response = await fetch('https://jritondo.app.n8n.cloud/webhook/agent-match', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         resumeText: resumeText,
                         candidateName: 'Anonymous Candidate',
@@ -826,31 +843,26 @@ Our AI will analyze this against all 20 jobs →"></textarea>
                     })
                 });
 
-                // Get response as text first
                 const responseText = await response.text();
                 console.log('Response received:', responseText.substring(0, 200));
 
-                // Try to parse as JSON
                 let results;
                 try {
                     results = JSON.parse(responseText);
                 } catch (e) {
-                    // If not JSON, treat as text
-                    results = {rawResponse: responseText};
+                    results = { rawResponse: responseText };
                 }
 
-                // Store whatever we got
                 sessionStorage.setItem('talentAIResults', JSON.stringify(results));
+                stopLoadingAnimation();
 
-                // Hide loading
-                document.getElementById('loading').classList.remove('active');
-
-                // Go to results page - let results.html handle the data
-                window.location.href = 'results.html';
+                setTimeout(() => {
+                    window.location.href = 'results.html';
+                }, 500);
 
             } catch (error) {
                 console.error('Error:', error);
-                document.getElementById('loading').classList.remove('active');
+                stopLoadingAnimation();
                 document.getElementById('analyzeBtn').disabled = false;
                 alert('Connection error. Is the workflow running?\n\n' + error.message);
             }

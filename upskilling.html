@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upskilling Plan - TalentAI Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #0A2463;
+            --accent: #3E92CC;
+            --bright: #00D9FF;
+            --warm: #FF6B35;
+            --success: #10B981;
+            --dark: #0D1B2A;
+            --light: #F8F9FA;
+        }
+        body {
+            font-family: 'Bricolage Grotesque', sans-serif;
+            background: linear-gradient(135deg, #F8F9FA 0%, #E8EAF6 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-bottom: 4rem;
+        }
+        .container { max-width: 1000px; margin: 0 auto; padding: 2rem; }
+
+        /* Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0 1rem;
+        }
+        .back-link {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            color: var(--accent); text-decoration: none; font-weight: 600;
+            margin-bottom: 2rem; transition: gap 0.3s;
+        }
+        .back-link:hover { gap: 1rem; }
+        .page-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: 0.5px;
+        }
+        .page-header h1 {
+            font-size: 2.75rem; font-weight: 800; color: var(--dark);
+            line-height: 1.2; margin-bottom: 0.5rem; letter-spacing: -1px;
+        }
+        .page-header .job-subtitle {
+            font-size: 1.2rem; color: #6B7280; font-weight: 600;
+        }
+
+        /* Job context banner */
+        .job-banner {
+            background: linear-gradient(135deg, #0A2463 0%, #3E92CC 100%);
+            border-radius: 20px;
+            padding: 2rem 2.5rem;
+            margin-bottom: 2.5rem;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            box-shadow: 0 8px 30px rgba(10,36,99,0.25);
+        }
+        .job-banner-info h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 0.25rem; }
+        .job-banner-info .company { font-size: 1.05rem; opacity: 0.85; font-weight: 600; }
+        .match-pill {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            text-align: center;
+        }
+        .match-pill .score-num { font-size: 2rem; font-weight: 800; color: var(--bright); display: block; }
+        .match-pill .score-label { font-size: 0.8rem; opacity: 0.85; font-weight: 600; }
+
+        /* Summary stats row */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+        .stat-box {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+        .stat-box .stat-icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .stat-box .stat-val { font-size: 1.4rem; font-weight: 800; color: var(--primary); }
+        .stat-box .stat-lbl { font-size: 0.8rem; color: #6B7280; font-weight: 600; margin-top: 0.25rem; }
+
+        /* Section card */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+        }
+        .card-title {
+            font-size: 1.5rem; font-weight: 700; color: var(--primary);
+            margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.6rem;
+            padding-bottom: 1rem; border-bottom: 2px solid #F3F4F6;
+        }
+
+        /* Week timeline */
+        .timeline { position: relative; }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 22px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--accent), var(--bright));
+            border-radius: 2px;
+        }
+        .week-item {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.75rem;
+            position: relative;
+        }
+        .week-dot {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            font-weight: 800;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(10,36,99,0.25);
+            z-index: 1;
+            text-align: center;
+            line-height: 1.2;
+        }
+        .week-content {
+            flex: 1;
+            background: linear-gradient(135deg, #F9FAFB, #F3F4F6);
+            border-radius: 15px;
+            padding: 1.25rem 1.5rem;
+            border-left: 4px solid var(--accent);
+        }
+        .week-phase {
+            font-size: 0.8rem; font-weight: 700; color: var(--accent);
+            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.4rem;
+        }
+        .week-focus {
+            font-size: 1.1rem; font-weight: 700; color: var(--dark); margin-bottom: 0.75rem;
+        }
+        .week-activities { list-style: none; margin-bottom: 1rem; }
+        .week-activities li {
+            color: #4B5563; font-size: 0.95rem; padding: 0.3rem 0;
+            display: flex; gap: 0.6rem; align-items: flex-start;
+        }
+        .week-activities li::before { content: "→"; color: var(--accent); font-weight: 700; flex-shrink: 0; }
+        .week-footer {
+            display: flex; gap: 1rem; flex-wrap: wrap;
+            font-size: 0.85rem; margin-top: 0.75rem;
+        }
+        .week-badge {
+            background: white; padding: 0.35rem 0.85rem;
+            border-radius: 20px; font-weight: 600; color: #4B5563;
+            border: 1px solid #E5E7EB;
+        }
+        .week-deliverable {
+            background: #ECFDF5; padding: 0.75rem 1rem;
+            border-radius: 8px; font-size: 0.88rem; color: #065F46;
+            border-left: 3px solid var(--success); margin-top: 0.75rem;
+        }
+        .week-deliverable strong { display: block; margin-bottom: 0.2rem; }
+
+        /* Resources */
+        .resource-item {
+            display: flex; align-items: flex-start; gap: 1rem;
+            background: #F9FAFB; border-radius: 12px; padding: 1.25rem;
+            margin-bottom: 1rem; border: 1px solid #E5E7EB;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .resource-item:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+        .resource-icon {
+            width: 44px; height: 44px; border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem; flex-shrink: 0;
+        }
+        .resource-info .resource-type { font-size: 0.78rem; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .resource-info .resource-name { font-size: 1rem; font-weight: 700; color: var(--dark); margin: 0.2rem 0; }
+        .resource-info .resource-meta { font-size: 0.88rem; color: #6B7280; }
+        .resource-right {
+            margin-left: auto;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.5rem;
+        }
+        .resource-cost {
+            background: #ECFDF5; color: #065F46;
+            padding: 0.4rem 0.9rem; border-radius: 8px; font-weight: 700; font-size: 0.9rem;
+            white-space: nowrap;
+        }
+        .resource-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            padding: 0.45rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(10,36,99,0.2);
+        }
+        .resource-link:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(10,36,99,0.3);
+        }
+        .resource-link-search {
+            background: linear-gradient(135deg, #6B7280, #4B5563);
+        }
+
+        /* Career impact footer */
+        .career-footer {
+            background: linear-gradient(135deg, #0A2463 0%, #1e3a8a 50%, #3E92CC 100%);
+            border-radius: 20px;
+            padding: 2.5rem;
+            color: white;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 30px rgba(10,36,99,0.25);
+        }
+        .career-footer h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 1rem; }
+        .career-footer p { opacity: 0.9; line-height: 1.8; margin-bottom: 1rem; }
+        .career-meta-row {
+            display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 1.25rem;
+        }
+        .career-meta-pill {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
+            padding: 0.6rem 1.2rem; border-radius: 30px;
+            font-size: 0.9rem; font-weight: 600;
+        }
+
+        /* No plan state */
+        .no-plan {
+            text-align: center; padding: 4rem 2rem;
+        }
+        .no-plan .no-plan-icon { font-size: 4rem; margin-bottom: 1rem; }
+        .no-plan h2 { font-size: 1.8rem; font-weight: 700; color: var(--dark); margin-bottom: 0.75rem; }
+        .no-plan p { color: #6B7280; max-width: 500px; margin: 0 auto; }
+
+        @media (max-width: 768px) {
+            .job-banner { flex-direction: column; }
+            .timeline::before { left: 18px; }
+            .week-dot { width: 38px; height: 38px; font-size: 0.65rem; }
+            .page-header h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page-header">
+            <a href="results.html" class="back-link">← Back to Results</a>
+            <div class="page-badge">🎓 Personalized Learning Path</div>
+            <h1 id="pageTitle">Upskilling Plan</h1>
+            <p class="job-subtitle" id="pageSubtitle">Loading your plan...</p>
+        </div>
+
+        <div id="pageContent">
+            <!-- Dynamically rendered -->
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            // Retrieve selected rank
+            const rank = parseInt(sessionStorage.getItem('upskillingJobRank') || '1', 10);
+
+            // Pull data from session storage
+            let websiteData = null;
+            let fullAnalysis = null;
+
+            try {
+                const raw = sessionStorage.getItem('talentAIResults');
+                if (!raw) throw new Error('No data');
+                const parsed = JSON.parse(raw);
+                // Handle n8n array wrapper
+                const entry = Array.isArray(parsed) ? parsed[0] : parsed;
+                websiteData = entry?.websiteData || entry;
+                fullAnalysis = entry?.fullAnalysis || null;
+            } catch (e) {
+                showError('No results data found.');
+                return;
+            }
+
+            // Find the matching job from topMatches (websiteData level)
+            const topMatches = websiteData?.topMatches || [];
+            const match = topMatches.find(m => m.rank === rank);
+
+            if (!match) {
+                showError('Could not find match data for this job.');
+                return;
+            }
+
+            // Prefer fullAnalysis upskilling data if available (richer), fall back to websiteData match
+            const fullMatch = fullAnalysis?.topMatches?.find(m => m.rank === rank);
+            const upskilling = fullMatch?.upskilling || match.upskilling || null;
+            const growthPotential = fullMatch?.growthPotential || match.growthPotential || null;
+            const concerns = fullMatch?.concerns || match.concerns || [];
+            const interviewFocus = fullMatch?.interviewFocus || match.interviewFocus || [];
+
+            if (!upskilling) {
+                showError('No upskilling plan available for this job match.');
+                return;
+            }
+
+            renderPage(match, upskilling, growthPotential, concerns, interviewFocus);
+        });
+
+        function renderPage(match, upskilling, growthPotential, concerns, interviewFocus) {
+            const score = match.matchScore || match.score || 0;
+
+            document.getElementById('pageTitle').textContent = match.jobTitle + ' — Upskilling Plan';
+            document.getElementById('pageSubtitle').textContent = match.company + ' · ' + (match.location || '');
+
+            // Build stats
+            const totalCost = upskilling.totalEstimatedCost
+                ? '$' + upskilling.totalEstimatedCost
+                : (upskilling.totalCost || 'N/A');
+            const totalDuration = upskilling.totalDuration || 'N/A';
+            const timeCommitment = upskilling.timeCommitment || upskilling.hoursPerWeek || 'N/A';
+            const weekCount = (upskilling.weekByWeekPlan || []).length;
+
+            const statsHTML = `
+                <div class="stats-row">
+                    <div class="stat-box">
+                        <div class="stat-icon">📅</div>
+                        <div class="stat-val">${totalDuration}</div>
+                        <div class="stat-lbl">Total Duration</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon">⏱️</div>
+                        <div class="stat-val">${timeCommitment}</div>
+                        <div class="stat-lbl">Per Week</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-val">${totalCost}</div>
+                        <div class="stat-lbl">Est. Cost</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon">📋</div>
+                        <div class="stat-val">${weekCount}</div>
+                        <div class="stat-lbl">Learning Phases</div>
+                    </div>
+                </div>
+            `;
+
+            // Build weekly plan
+            let weeklyHTML = '';
+            if (upskilling.weekByWeekPlan && upskilling.weekByWeekPlan.length > 0) {
+                const weeksMarkup = upskilling.weekByWeekPlan.map((week, i) => {
+                    const activities = (week.activities || []).map(a =>
+                        `<li>${a}</li>`
+                    ).join('');
+                    const hours = week.hoursPerWeek ? `<span class="week-badge">⏱ ${week.hoursPerWeek} hrs/wk</span>` : '';
+                    const deliverable = week.deliverable
+                        ? `<div class="week-deliverable"><strong>🎯 Deliverable:</strong>${week.deliverable}</div>`
+                        : '';
+                    return `
+                        <div class="week-item">
+                            <div class="week-dot">${week.phase || ('W' + (i+1))}</div>
+                            <div class="week-content">
+                                <div class="week-phase">${week.phase || 'Phase ' + (i+1)}</div>
+                                <div class="week-focus">${week.focus || ''}</div>
+                                <ul class="week-activities">${activities}</ul>
+                                <div class="week-footer">${hours}</div>
+                                ${deliverable}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                weeklyHTML = `
+                    <div class="card">
+                        <h3 class="card-title">📅 Week-by-Week Learning Plan</h3>
+                        <div class="timeline">${weeksMarkup}</div>
+                    </div>
+                `;
+            }
+
+            // Build resources
+            let resourcesHTML = '';
+            if (upskilling.resources && upskilling.resources.length > 0) {
+                const resourceItems = upskilling.resources.map(r => {
+                    const cost = r.estimatedCost != null ? '$' + r.estimatedCost : '';
+                    const iconMap = { 'Book': '📚', 'Course': '💻', 'Certification': '🏅', 'Video': '🎥', 'Workshop': '🏫' };
+                    const icon = iconMap[r.type] || '📖';
+
+                    // Link logic: use Claude-provided URL if present, otherwise fall back to Google search
+                    let linkHTML = '';
+                    if (r.url && r.url.startsWith('http')) {
+                        // Direct URL from Claude — open in new tab
+                        linkHTML = `<a class="resource-link" href="${r.url}" target="_blank" rel="noopener noreferrer">
+                                        View Resource ↗
+                                    </a>`;
+                    } else {
+                        // Fallback: Google search using name + provider
+                        const query = encodeURIComponent((r.provider ? r.provider + ' ' : '') + r.name);
+                        const searchUrl = 'https://www.google.com/search?q=' + query;
+                        linkHTML = `<a class="resource-link resource-link-search" href="${searchUrl}" target="_blank" rel="noopener noreferrer">
+                                        Search ↗
+                                    </a>`;
+                    }
+
+                    return `
+                        <div class="resource-item">
+                            <div class="resource-icon">${icon}</div>
+                            <div class="resource-info">
+                                <div class="resource-type">${r.type || 'Resource'}</div>
+                                <div class="resource-name">${r.name}</div>
+                                <div class="resource-meta">${r.provider || ''}</div>
+                            </div>
+                            <div class="resource-right">
+                                ${cost ? `<div class="resource-cost">${cost}</div>` : ''}
+                                ${linkHTML}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                resourcesHTML = `
+                    <div class="card">
+                        <h3 class="card-title">📚 Recommended Resources</h3>
+                        ${resourceItems}
+                    </div>
+                `;
+            }
+
+            // Build career impact / growth section
+            let careerHTML = '';
+            const hasCareerInfo = growthPotential || concerns.length || interviewFocus.length
+                || upskilling.careerProgression || upskilling.totalCost;
+            if (hasCareerInfo) {
+                const progression = upskilling.careerProgression || '';
+                const concernsList = concerns.length
+                    ? `<div style="margin-top:1rem;">
+                           <strong style="opacity:0.9;">⚠️ Things to Consider:</strong>
+                           <ul style="margin-top:0.5rem;margin-left:1rem;opacity:0.85;">
+                               ${concerns.map(c => `<li style="margin-bottom:0.4rem;">${c}</li>`).join('')}
+                           </ul>
+                       </div>`
+                    : '';
+                const focusList = interviewFocus.length
+                    ? `<div style="margin-top:1rem;">
+                           <strong style="opacity:0.9;">🎯 Interview Focus Areas:</strong>
+                           <div style="display:flex;flex-wrap:wrap;gap:0.6rem;margin-top:0.6rem;">
+                               ${interviewFocus.map(f => `<span style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);padding:0.4rem 0.9rem;border-radius:20px;font-size:0.88rem;">${f}</span>`).join('')}
+                           </div>
+                       </div>`
+                    : '';
+                careerHTML = `
+                    <div class="career-footer">
+                        <h3>🚀 Career Growth Potential</h3>
+                        ${growthPotential ? `<p>${growthPotential}</p>` : ''}
+                        ${progression ? `<p>${progression}</p>` : ''}
+                        ${concernsList}
+                        ${focusList}
+                        <div class="career-meta-row">
+                            ${upskilling.totalDuration ? `<span class="career-meta-pill">📅 ${upskilling.totalDuration}</span>` : ''}
+                            ${totalCost !== 'N/A' ? `<span class="career-meta-pill">💰 ${totalCost} investment</span>` : ''}
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Job banner
+            const bannerHTML = `
+                <div class="job-banner">
+                    <div class="job-banner-info">
+                        <h2>${match.jobTitle}</h2>
+                        <div class="company">${match.company} · ${match.location || ''} · ${match.salary || ''}</div>
+                    </div>
+                    <div class="match-pill">
+                        <span class="score-num">${score}%</span>
+                        <span class="score-label">Match Score</span>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('pageContent').innerHTML =
+                bannerHTML + statsHTML + weeklyHTML + resourcesHTML + careerHTML;
+        }
+
+        function showError(msg) {
+            document.getElementById('pageTitle').textContent = 'Upskilling Plan';
+            document.getElementById('pageSubtitle').textContent = '';
+            document.getElementById('pageContent').innerHTML = `
+                <div class="card no-plan">
+                    <div class="no-plan-icon">📭</div>
+                    <h2>No Plan Available</h2>
+                    <p>${msg}</p>
+                    <a href="results.html" style="display:inline-block;margin-top:1.5rem;background:linear-gradient(135deg,#0A2463,#3E92CC);color:white;padding:0.9rem 2rem;border-radius:12px;text-decoration:none;font-weight:700;">← Back to Results</a>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
